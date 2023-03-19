@@ -1,0 +1,108 @@
+{% block content %}
+    <div class="row">
+        <div class="card">
+            {{ form_start(form,{'attr':{'novalidate':'novalidate'}} ) }}
+
+
+            <div class="mb-3">
+                <label class="form-label" for="article-title-input">Email</label>
+                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter your email'}}) }}
+                {% if form_errors(form.email)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.email) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="article-title-input">Roles</label>
+                {{ form_widget(form.roles, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors(form.roles)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.roles) }}
+                    </div>
+                {% endif %}
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label" for="url-input">Password</label>
+                {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors(form.password)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.password) }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label" for="body-input">Name</label>
+                {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter your name'}}) }}
+                {% if form_errors(form.name)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.name) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="body-input">First Name</label>
+                {{ form_widget(form.first_name, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors(form.first_name)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.first_name) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="body-input">Last name</label>
+                {{ form_widget(form.last_name, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors(form.last_name)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.last_name) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="body-input">Note</label>
+                {{ form_widget(form.note, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors(form.note)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.note) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="body-input">Added on</label>
+                {{ form_widget(form.added_on, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors(form.added_on)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.added_on) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="body-input">Piéce jointe</label>
+                {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors(form.imageFile)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.imageFile) }}
+                    </div>
+                {% endif %}
+            </div>
+
+            {{ form_widget(form) }}
+            <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+{% endblock %}

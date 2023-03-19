@@ -1,0 +1,7 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+search:
+  path: /search
+  methods: [GET]
+  controller: App\Controller\AccountsController::search

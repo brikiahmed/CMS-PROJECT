@@ -1,0 +1,9 @@
+# config/packages/easy_admin.yaml
+
+easy_admin:
+  entities:
+    Product:
+      class: App\Entity\Accounts
+      list:
+        filters: ['name', 'email']
+        sort: ['name', 'name']

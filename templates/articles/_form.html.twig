@@ -1,0 +1,170 @@
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+     <div class="card">
+           <div class="card-body">
+   {{ form_start (form,{'attr':{'novalidate':'novalidate'}} ) }}
+      <div class="mb-3">
+         <label class="form-label" for="article-title-input">Article Title</label>
+          {{ form_widget (form.title, {'attr': {'class': 'form-control', 'placeholder': 'Enter article title'}}) }}
+          {% if form_errors (form.title)is not empty %}    
+            <div class="alert alert-danger">
+            {{ form_errors (form.title) }}
+            </div>
+            {% endif %}
+     </div>
+
+<div class="mb-3">
+         <label class="form-label" for="url-input">Url</label>
+          {{ form_widget (form.url, {'attr': {'class': 'form-control'}}) }}
+            {% if form_errors(form.url)is not empty %}    
+            <div class="alert alert-danger">
+            {{ form_errors(form.url) }}
+            </div>
+            {% endif %}
+
+    </div>
+
+ 
+
+
+   
+<div class="mb-3">
+         <label class="form-label" for="body-input">Body</label>
+          {{ form_widget (form.body, {'attr': {'class': 'form-control'}}) }}
+            {% if form_errors (form.body)is not empty %}    
+            <div class="alert alert-danger">
+            {{ form_errors (form.body) }}
+            </div>
+            {% endif %}
+
+    </div>
+    
+    <div class="mb-3">
+         <label class="form-label" for="short-description-input">Short Description</label>
+          {{ form_widget (form.short_description, {'attr': {'class': 'form-control'}}) }}
+            {% if form_errors (form.short_description)is not empty %}    
+            <div class="alert alert-danger">
+            {{ form_errors (form.short_description) }}
+            </div>
+            {% endif %}
+
+    </div>
+
+
+    <div class="mb-3">
+          <label class="form-label" for="project-thumbnail-img">Article Picture</label>
+         {{ form_widget (form.article_picture, {'attr': {'class': 'form-control'}}) }}
+            {% if form_errors (form.article_picture)is not empty %}    
+            <div class="alert alert-danger">
+            {{ form_errors (form.article_picture) }}
+            </div>
+            {% endif %}
+    </div>
+
+<div class="mb-3">
+         <label class="form-label" for="other-file-input">Other File </label>
+          {{ form_widget (form.other_file, {'attr': {'class': 'form-control'}}) }}
+            {% if form_errors (form.other_file)is not empty %}    
+            <div class="alert alert-danger">
+            {{ form_errors (form.other_file) }}
+            </div>
+            {% endif %}
+     </div>
+    
+</div>
+</div>
+</div>
+
+
+<div class="col-lg-4 ">
+              <div class="card ">
+       
+                    <div class="card-header">
+                           <h5 class="card-title mb-0">Categories</h5>
+                      </div>
+                      <div class="card-body">
+                       <div>
+                       <label for="choices-categories-input" class="form-label">Select Categories</label>
+                        {{ form_widget (form.articles_categories, {'attr': {'class': 'form-control'}}) }}
+                            {% if form_errors (form.articles_categories)is not empty %}    
+                                  <div class="alert alert-danger">
+                                        {{ form_errors (form.articles_categories) }}
+                                   </div>
+                          {% endif %} 
+
+
+                              </div>
+                          </div>
+                      <!-- end card body -->
+              </div>
+              <!-- end card -->
+        
+
+    
+              <div class="card">
+       
+                    <div class="card-header">
+                           <h5 class="card-title mb-0">Sub-Category</h5>
+                      </div>
+                      <div class="card-body">
+                       <div>
+                       <label for="choices-sub-category-input" class="form-label">Select Sub-Categories</label>
+                        {{ form_widget (form.articles_sub_category, {'attr': {'class': 'form-control'}}) }}
+                            {% if form_errors (form.articles_sub_category)is not empty %}    
+                                  <div class="alert alert-danger">
+                                        {{ form_errors (form.articles_sub_category) }}
+                                   </div>
+                          {% endif %} 
+
+
+                              </div>
+                          </div>
+                      <!-- end card body -->
+              </div>
+              <!-- end card -->
+        
+
+
+
+ 
+              <div class="card">
+       
+                    <div class="card-header">
+                           <h5 class="card-title mb-0">Tags</h5>
+                      </div>
+                      <div class="card-body">
+                       <div>
+                       <label for="choices-sub-category-input" class="form-label">Add New Tag</label>
+                        {{ form_widget (form.tags, {'attr': {'class': 'form-control'}}) }}
+                            {% if form_errors (form.tags)is not empty %}    
+                                  <div class="alert alert-danger">
+                                        {{ form_errors (form.tags) }}
+                                   </div>
+                          {% endif %} 
+
+
+                              </div>
+                          </div>
+                      <!-- end card body -->
+              </div>
+              <!-- end card -->
+        </div>
+    
+   
+
+
+   <div>
+         {{ form_widget (form) }}
+         
+             <button type="submit" class="btn rounded-pill btn-primary waves-effect waves-light">{{ button_label|default('Save') }}</button>
+      </div>
+    
+{{ form_end(form) }}
+ 
+ </div>
+
+ 
+
+{% endblock %} 

@@ -1,0 +1,75 @@
+{% block content %}
+    <div class="row">
+     <div class="col-lg-8">
+        <div class="card"> 
+        <div class="card-body">
+            {{ form_start (form,{'attr':{'novalidate':'novalidate'}} ) }}
+
+
+            <div class="mb-3">
+                <label class="form-label" for="article-title-input">Title</label>
+                {{ form_widget (form.title, {'attr': {'class': 'form-control', 'placeholder': 'Enter  category title'}}) }}
+                {% if form_errors (form.title)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors (form.title) }}
+                    </div>
+                {% endif %}
+            </div>
+
+       <div class="mb-3">
+                <label class="form-label" for="short-description-input">Description</label>
+                {{ form_widget (form.short_description, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors (form.short_description)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors (form.short_description) }}
+                    </div>
+                {% endif %}
+            </div>
+
+      <div class="mb-3">
+                <label class="form-label" for="sub-category-picture-input">Sub-Category Picture</label>
+                {{ form_widget (form.sub_category_picture, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors (form.sub_category_picture)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors (form.sub_category_picture) }}
+                    </div>
+                {% endif %}
+            </div>
+
+
+</div>
+</div>
+</div>
+
+
+      <div class="col-lg-4 ">
+              <div class="card ">
+       
+                    <div class="card-header">
+                           <h5 class="card-title mb-0">Categories</h5>
+                      </div>
+                      <div class="card-body">
+                       <div>
+                       <label for="choices-categories-input" class="form-label">Select Categories</label>
+                        {{ form_widget (form.categories, {'attr': {'class': 'form-control'}}) }}
+                            {% if form_errors (form.categories)is not empty %}    
+                                  <div class="alert alert-danger">
+                                        {{ form_errors (form.categories) }}
+                                   </div>
+                          {% endif %} 
+
+
+                              </div>
+                          </div>
+                      <!-- end card body -->
+              </div>
+              <!-- end card -->
+        
+     
+         {{ form_widget (form) }}
+             <button type="submit" class="btn rounded-pill btn-primary waves-effect waves-light">{{ button_label|default('Save') }}</button>
+
+{{ form_end(form) }}
+
+</div>
+{% endblock %}

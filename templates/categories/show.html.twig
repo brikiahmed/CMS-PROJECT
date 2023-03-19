@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">show Category</h4>
+
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Category</a></li>
+                        <li class="breadcrumb-item active">Show Category</li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-lg-auto">
+                    <div class="hstack gap-2">
+                        <a href="{{ path('app_categories_new') }}"><button type="button" class="btn btn-primary waves-effect waves-ligh" ><i class="ri-add-fill me-1 align-bottom"></i>  Add Categories</button></a>
+                    </div>
+                </div>
+
+                <div class="col-xxl-5 col-sm-9">
+                    <div class="search-box">
+                        <input type="text" class="form-control search bg-light border-light" placeholder="Search for category or something...">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                </div>
+
+                <div class="col-auto order-2 order-sm-1 ms-auto">
+                    <div class="hstack gap-2">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a href="{{ path('app_categories_index') }}"><button class="btn btn-icon fw-semibold btn-soft-danger"><i class="ri-arrow-go-back-line"></i></button></a>
+                            <a href="{{ path('app_categories_new') }}"><button class="btn btn-icon fw-semibold btn-soft-success"><i class="ri-arrow-go-forward-line"></i></button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ category.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ category.title }}</td>
+            </tr>
+            <tr>
+                <th>Author</th>
+                <td>{{ category.author }}</td>
+            </tr>
+            <tr>
+                <th>Updated</th>
+                <td>{{ category.updated }}</td>
+            </tr>
+            <tr>
+                <th>Created_on</th>
+                <td>{{ category.createdOn ? category.createdOn|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_on</th>
+                <td>{{ category.updatedOn ? category.updatedOn|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ category.slug }}</td>
+            </tr>
+            <tr>
+                <th>Category_picture</th>
+                <td>{{ category.categoryPicture }}</td>
+            </tr>
+            <tr>
+                <th>Short_description</th>
+                <td>{{ category.shortDescription }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_categories_index') }}">back to list</a>
+
+    <a href="{{ path('app_categories_edit', {'id': category.id}) }}">edit</a>
+
+    {{ include('categories/_delete_form.html.twig') }}
+{% endblock %}

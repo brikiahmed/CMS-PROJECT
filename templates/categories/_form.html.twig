@@ -1,0 +1,48 @@
+{% block content %}
+    <div class="row">
+        <div class="card">
+            {{ form_start (form,{'attr':{'novalidate':'novalidate'}} ) }}
+
+
+            <div class="mb-3">
+                <label class="form-label" for="article-title-input">Title</label>
+                {{ form_widget (form.title, {'attr': {'class': 'form-control', 'placeholder': 'Enter  category title'}}) }}
+                {% if form_errors (form.title)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors (form.title) }}
+                    </div>
+                {% endif %}
+            </div>
+
+       <div class="mb-3">
+                <label class="form-label" for="short-description-input">Description</label>
+                {{ form_widget (form.short_description, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors (form.short_description)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors (form.short_description) }}
+                    </div>
+                {% endif %}
+            </div>
+
+      <div class="mb-3">
+                <label class="form-label" for="category-picture-input">Category Picture</label>
+                {{ form_widget (form.category_picture, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors (form.category_picture)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors (form.category_picture) }}
+                    </div>
+                {% endif %}
+            </div>
+
+    
+     <div>
+         {{ form_widget (form) }}
+         
+             <button type="submit" class="btn rounded-pill btn-primary waves-effect waves-light">{{ button_label|default('Save') }}</button>
+      </div>
+{{ form_end(form) }}
+</div>
+</div>
+</div>
+</div>
+{% endblock %}
