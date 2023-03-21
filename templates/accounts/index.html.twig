@@ -88,29 +88,32 @@
                 <td>{{ account.addedOn ? account.addedOn|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('app_accounts_edit', {'id': account.id}) }}"><button class="btn btn-outline-success btn-border"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></button></a>
-                    <a href="{{ path('app_accounts_index') }}"><button class="btn btn-soft-danger btn-border" data-bs-toggle="modal" data-bs-target="#topmodal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></button>
-                    <div id="topmodal" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-body text-center p-5">
-                                                            <lord-icon src="https://cdn.lordicon.com/pithnlch.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:120px;height:120px">
-                                                            </lord-icon>
-                                                            <div class="mt-4">
-                                                                <h3 class="mb-3">Information Message</h3>
-                                                                <p class="text-muted mb-4">You are deleting this accounts.This action is irreversible.Are you sure?</p>
-                                                                <div class="hstack gap-2 justify-content-center">
-                                                                    <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Cancel</a>
-                                                                    <a href="javascript:void(0);" class="btn btn-success">Validate</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div><!-- /.modal-content -->
-                                                </div><!-- /.modal-dialog -->
+                        <a><button class="btn btn-soft-danger btn-border" data-bs-toggle="modal" data-bs-target="#topmodal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></button>
+                            <div id="topmodal" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body text-center p-5">
+                                            <lord-icon src="https://cdn.lordicon.com/pithnlch.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:120px;height:120px">
+                                            </lord-icon>
+                                            <div class="mt-4">
+                                                <h3 class="mb-3">Information Message</h3>
+                                                <p class="text-muted mb-4">You are deleting this accounts.This action is irreversible.Are you sure?</p>
+                                                <div class="hstack gap-2 justify-content-center">
+                                                        <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Cancel</a>
+                                                    <form method="post" action="{{ path('app_accounts_delete', {'id': account.id}) }}">
+                                                        <button class="btn btn-success"><input type="hidden" name="_token" value="{{ csrf_token('delete' ~ account.id) }}">Validate</button>
+                                                    </form>
+                                                </div>
                                             </div>
-                                         </a>
-                    <a href="{{ path('app_accounts_show', {'id': account.id}) }}"><button class="btn btn-outline-secondary btn-border"> <i class="ri-eye-fill align-bottom me-2 text-muted"></i></button></a>
-                    
+                                        </div>
+                                    </div><!-- /.modal-content -->
+                                </div><!-- /.modal-dialog -->
+                            </div>
+                        </a>
+                        <a href="{{ path('app_accounts_show', {'id': account.id}) }}"><button class="btn btn-outline-secondary btn-border"> <i class="ri-eye-fill align-bottom me-2 text-muted"></i></button></a>
+
                 </td>
+
             </tr>
         {% else %}
             <tr>
@@ -133,6 +136,7 @@
       </div>
     </div>
 </div>
+
 
     
 {% endblock %}
@@ -191,4 +195,27 @@
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function() {
+            // When the user clicks on the delete button
+            $(".delete-btn").on("click", function() {
+                // Get the ID of the item to delete
+                var itemId = $(this).data("id");
+
+                // Set the action of the delete form to the URL for deleting the item
+                $("#delete-form").attr("action", "/items/" + itemId);
+
+                // Show the modal
+                $("#topmodal").modal("show");
+            });
+
+            // When the user confirms the deletion
+            $("#delete-form").on("submit", function() {
+                // Submit the form
+                $(this).submit();
+            });
+        });
+    </script>
+
 {% endblock %}
