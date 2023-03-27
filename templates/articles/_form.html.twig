@@ -87,10 +87,10 @@
                       <div class="card-body">
                        <div>
                        <label for="choices-categories-input" class="form-label">Select Categories</label>
-                        {{ form_widget (form.articles_categories, {'attr': {'class': 'form-control'}}) }}
-                            {% if form_errors (form.articles_categories)is not empty %}    
+                        {{ form_widget (form.category, {'attr': {'class': 'form-control'}}) }}
+                            {% if form_errors (form.category)is not empty %}
                                   <div class="alert alert-danger">
-                                        {{ form_errors (form.articles_categories) }}
+                                        {{ form_errors (form.category) }}
                                    </div>
                           {% endif %} 
 
@@ -111,36 +111,10 @@
                       <div class="card-body">
                        <div>
                        <label for="choices-sub-category-input" class="form-label">Select Sub-Categories</label>
-                        {{ form_widget (form.articles_sub_category, {'attr': {'class': 'form-control'}}) }}
-                            {% if form_errors (form.articles_sub_category)is not empty %}    
+                        {{ form_widget (form.subCategory, {'attr': {'class': 'form-control'}}) }}
+                            {% if form_errors (form.subCategory)is not empty %}
                                   <div class="alert alert-danger">
-                                        {{ form_errors (form.articles_sub_category) }}
-                                   </div>
-                          {% endif %} 
-
-
-                              </div>
-                          </div>
-                      <!-- end card body -->
-              </div>
-              <!-- end card -->
-        
-
-
-
- 
-              <div class="card">
-       
-                    <div class="card-header">
-                           <h5 class="card-title mb-0">Tags</h5>
-                      </div>
-                      <div class="card-body">
-                       <div>
-                       <label for="choices-sub-category-input" class="form-label">Add New Tag</label>
-                        {{ form_widget (form.tags, {'attr': {'class': 'form-control'}}) }}
-                            {% if form_errors (form.tags)is not empty %}    
-                                  <div class="alert alert-danger">
-                                        {{ form_errors (form.tags) }}
+                                        {{ form_errors (form.subCategory) }}
                                    </div>
                           {% endif %} 
 

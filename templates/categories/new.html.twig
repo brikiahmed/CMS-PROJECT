@@ -19,42 +19,5 @@
         </div>
     </div>
 
-
-    <div class="card">
-        <div class="card-body">
-            <div class="row g-2">
-                <div class="col-lg-auto">
-                    <div class="hstack gap-2">
-                        <a href="{{ path('app_categories_new') }}"><button type="button" class="btn btn-primary waves-effect waves-ligh" ><i class="ri-add-fill me-1 align-bottom"></i>  Add Categories</button></a>
-                    </div>
-                </div>
-
-                <div class="col-xxl-5 col-sm-9">
-                    <div class="search-box">
-                        <input type="text" class="form-control search bg-light border-light" placeholder="Search for category or something...">
-                        <i class="ri-search-line search-icon"></i>
-                    </div>
-                </div>
-
-                <div class="col-auto order-2 order-sm-1 ms-auto">
-                    <div class="hstack gap-2">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <a href="{{ path('app_categories_index') }}"><button class="btn btn-icon fw-semibold btn-soft-danger"><i class="ri-arrow-go-back-line"></i></button></a>
-                            <a href="{{ path('app_categories_new') }}"><button class="btn btn-icon fw-semibold btn-soft-success"><i class="ri-arrow-go-forward-line"></i></button></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> 
-
-
-    
-
-
-
-
     {{ include('categories/_form.html.twig') }}
-
-    <a href="{{ path('app_categories_index') }}">back to list</a>
 {% endblock %}

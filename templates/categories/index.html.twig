@@ -64,18 +64,33 @@
                                         </div>
                                 <th scope="col">Id</th>
                                 <th scope="col">Title</th>
+                                <th scope="col">Sub Category</th>
                                 <th scope="col">Author</th>
+                                <th scope="col">Updated</th>
                                 <th scope="col">created On</th>
                                 <th scope="col">Updated On</th>
-                                <th scope="col"style="width: 150px;" ></th>
+                                <th scope="col"style="width: 150px;" >Actions</th>
                   </th>
             </tr>
         </thead>
         <tbody>
         {% for category in categories %}
             <tr>
+                <td></td>
                 <td>{{ category.id }}</td>
                 <td>{{ category.title }}</td>
+                <td>
+
+                    {% for subcategory in subcategories %}
+
+                        <li>
+                            <input disabled type="checkbox" name="subcategory[]" value="{{ subcategory.id }}"
+                                   {% if subcategory.id in category.getSelectedSubcategories()|keys  %}checked {% endif %}>
+                            {{ subcategory.title }}
+                        </li>
+
+                    {% endfor %}
+                </td>
                 <td>{{ category.author }}</td>
                 <td>{{ category.updated }}</td>
                 <td>{{ category.createdOn ? category.createdOn|date('Y-m-d') : '' }}</td>

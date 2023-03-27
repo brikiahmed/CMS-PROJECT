@@ -122,12 +122,14 @@ class AccountsController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_accounts_delete", methods={"POST"})
+     * @Route("/delete/{id}", name="app_accounts_delete", methods={"POST"})
      */
     public function delete(Request $request, Accounts $account, AccountsRepository $accountsRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$account->getId(), $request->request->get('_token'))) {
-            $accountsRepository->remove($account, true);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($account);
+            $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_accounts_index', [], Response::HTTP_SEE_OTHER);

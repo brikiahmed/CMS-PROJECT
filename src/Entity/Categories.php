@@ -63,18 +63,19 @@ class Categories
     private $short_description;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Articles::class, mappedBy="articles_categories")
+     * @ORM\OneToMany(targetEntity="App\Entity\SubCategory", mappedBy="category")
+     */
+    private $subcategories;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Articles", mappedBy="category")
      */
     private $articles;
 
-    /**
-     * @ORM\OneToMany(targetEntity=SubCategory::class, mappedBy="categories")
-     */
-    private $categories_sub;
-
     public function __construct()
     {
-        $this->categories_sub = new ArrayCollection();
+        $this->subcategories = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     
@@ -183,18 +184,48 @@ class Categories
     }
 
     /**
-     * @return Collection<int, Articles>
+     * @return Collection|Subcategory[]
+     */
+    public function getSubcategories(): Collection
+    {
+        return $this->subcategories;
+    }
+
+    public function addSubcategory(Subcategory $subcategory): self
+    {
+        if (!$this->subcategories->contains($subcategory)) {
+            $this->subcategories[] = $subcategory;
+            $subcategory->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubcategory(Subcategory $subcategory): self
+    {
+        if ($this->subcategories->removeElement($subcategory)) {
+            // set the owning side to null (unless already changed)
+            if ($subcategory->getCategory() === $this) {
+                $subcategory->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Articles[]
      */
     public function getArticles(): Collection
     {
-        return $this->articles?: new ArrayCollection();
+        return $this->articles;
     }
 
     public function addArticle(Articles $article): self
     {
         if (!$this->articles->contains($article)) {
             $this->articles[] = $article;
-            $article->addArticlesCategory($this);
+            $article->setCategory($this);
         }
 
         return $this;
@@ -203,40 +234,29 @@ class Categories
     public function removeArticle(Articles $article): self
     {
         if ($this->articles->removeElement($article)) {
-            $article->removeArticlesCategory($this);
+            // set the owning side to null (unless already changed)
+            if ($article->getCategory() === $this) {
+                $article->setCategory(null);
+            }
         }
 
         return $this;
     }
 
     /**
-     * @return Collection<int, SubCategory>
+     * Returns an array of all selected subcategories and their IDs.
+     *
+     * @return array
      */
-    public function getCategoriesSub(): Collection
+    public function getSelectedSubcategories(): array
     {
-        return $this->categories_sub;
-    }
+        $selectedSubcategories = [];
 
-    public function addCategoriesSub(SubCategory $categoriesSub): self
-    {
-        if (!$this->categories_sub->contains($categoriesSub)) {
-            $this->categories_sub[] = $categoriesSub;
-            $categoriesSub->setCategories($this);
+        foreach ($this->subcategories as $subcategory) {
+            $selectedSubcategories[$subcategory->getId()] = true;
         }
 
-        return $this;
-    }
-
-    public function removeCategoriesSub(SubCategory $categoriesSub): self
-    {
-        if ($this->categories_sub->removeElement($categoriesSub)) {
-            // set the owning side to null (unless already changed)
-            if ($categoriesSub->getCategories() === $this) {
-                $categoriesSub->setCategories(null);
-            }
-        }
-
-        return $this;
+        return $selectedSubcategories;
     }
 
     public function __toString()

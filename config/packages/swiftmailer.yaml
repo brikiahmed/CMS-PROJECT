@@ -1,0 +1,7 @@
+swiftmailer:
+    url: '%env(MAILER_DSN)%'
+    transport: gmail
+    port: 587
+    spool: { type: 'memory' }
+    delivery_addresses: ['example@example.com']
+    disable_delivery: false
