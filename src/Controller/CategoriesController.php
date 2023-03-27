@@ -5,7 +5,10 @@ namespace App\Controller;
 use App\Entity\Categories;
 use App\Form\CategoriesType;
 use App\Repository\CategoriesRepository;
+use App\Repository\SubCategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,10 +21,11 @@ class CategoriesController extends AbstractController
     /**
      * @Route("/", name="app_categories_index", methods={"GET"})
      */
-    public function index(CategoriesRepository $categoriesRepository): Response
+    public function index(CategoriesRepository $categoriesRepository, SubCategoryRepository $subCategoryRepository): Response
     {
         return $this->render('categories/index.html.twig', [
             'categories' => $categoriesRepository->findAll(),
+            'subcategories' => $subCategoryRepository->findAll()
         ]);
     }
 
@@ -30,11 +34,31 @@ class CategoriesController extends AbstractController
      */
     public function new(Request $request, CategoriesRepository $categoriesRepository): Response
     {
+        //$user = $this->getUser();
         $category = new Categories();
+        $category->setAuthor('test');
+        $category->setCreatedOn(new \DateTime());
+        $category->setUpdatedOn(new \DateTime());
+        $category->setUpdated('test');
         $form = $this->createForm(CategoriesType::class, $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form->get('category_picture')->getData();
+            if ($file) {
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                try {
+                    $file->move(
+                        $this->getParameter('images_category_directory'),
+                        $fileName
+                    );
+                } catch (FileException $e) {
+                    $e->getMessage();
+                }
+
+                $category->setCategoryPicture($fileName);
+            }
             $categoriesRepository->add($category, true);
 
             return $this->redirectToRoute('app_categories_index', [], Response::HTTP_SEE_OTHER);
@@ -61,10 +85,30 @@ class CategoriesController extends AbstractController
      */
     public function edit(Request $request, Categories $category, CategoriesRepository $categoriesRepository): Response
     {
-        $form = $this->createForm(CategoriesType::class, $category);
+        $imageFilename = $category->getCategoryPicture();
+        $imagePath = $this->getParameter('images_category_directory').'/'.$imageFilename;
+        $imageFile = new File($imagePath);
+        $category->setUpdatedOn(new \DateTime());
+        $form = $this->createForm(CategoriesType::class, $category, ['image' => $imageFile]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form->get('category_picture')->getData();
+            if ($file) {
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                try {
+                    $file->move(
+                        $this->getParameter('images_category_directory'),
+                        $fileName
+                    );
+                } catch (FileException $e) {
+                    $e->getMessage();
+                }
+
+                $category->setCategoryPicture($fileName);
+            }
+
             $categoriesRepository->add($category, true);
 
             return $this->redirectToRoute('app_categories_index', [], Response::HTTP_SEE_OTHER);

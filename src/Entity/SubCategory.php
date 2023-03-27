@@ -42,16 +42,21 @@ class SubCategory
     private $sub_category_picture;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Articles::class, mappedBy="articles_sub_category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Categories", inversedBy="subcategories")
+     * @ORM\JoinColumn(name="categories_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Articles", mappedBy="subcategory")
      */
     private $articles;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="categories_sub")
-     */
-    private $categories;
+    public function __construct()
+    {
+        $this->articles = new ArrayCollection();
+    }
 
-    
 
     public function getId(): ?int
     {
@@ -106,19 +111,31 @@ class SubCategory
         return $this;
     }
 
+    public function getCategory(): ?Categories
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Categories $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
     /**
-     * @return Collection<int, Articles>
+     * @return Collection|Articles[]
      */
     public function getArticles(): Collection
     {
-        return $this->articles?: new ArrayCollection();
+        return $this->articles;
     }
 
     public function addArticle(Articles $article): self
     {
         if (!$this->articles->contains($article)) {
             $this->articles[] = $article;
-            $article->addArticlesSubCategory($this);
+            $article->setSubcategory($this);
         }
 
         return $this;
@@ -126,21 +143,13 @@ class SubCategory
 
     public function removeArticle(Articles $article): self
     {
-        if ($this->articles->removeElement($article)) {
-            $article->removeArticlesSubCategory($this);
+        if ($this->articles->contains($article)) {
+            $this->articles->removeElement($article);
+            // set the owning side to null (unless already changed)
+            if ($article->getSubcategory() === $this) {
+                $article->setSubcategory(null);
+            }
         }
-
-        return $this;
-    }
-
-    public function getCategories(): ?Categories
-    {
-        return $this->categories;
-    }
-
-    public function setCategories(?Categories $categories): self
-    {
-        $this->categories = $categories;
 
         return $this;
     }

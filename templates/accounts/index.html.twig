@@ -100,7 +100,7 @@
                                                 <p class="text-muted mb-4">You are deleting this accounts.This action is irreversible.Are you sure?</p>
                                                 <div class="hstack gap-2 justify-content-center">
                                                         <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Cancel</a>
-                                                    <form method="post" action="{{ path('app_accounts_delete', {'id': account.id}) }}">
+                                                    <form method="post" x²>
                                                         <button class="btn btn-success"><input type="hidden" name="_token" value="{{ csrf_token('delete' ~ account.id) }}">Validate</button>
                                                     </form>
                                                 </div>

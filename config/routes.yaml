@@ -10,3 +10,7 @@ app_accounts_delete:
   path: /accounts/delete/{id}
   controller: App\Controller\AccountsController::delete
   methods: [POST]
+
+app_login:
+  path: /auth
+  controller: App\Controller\AuthController::login

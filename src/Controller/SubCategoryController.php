@@ -6,6 +6,7 @@ use App\Entity\SubCategory;
 use App\Form\SubCategoryType;
 use App\Repository\SubCategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,6 +36,23 @@ class SubCategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form->get('sub_category_picture')->getData();
+
+            if ($file) {
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                try {
+                    $file->move(
+                        $this->getParameter('images_sub_category_directory'),
+                        $fileName
+                    );
+                } catch (FileException $e) {
+                    $e->getMessage();
+                }
+
+                $subCategory->setSubCategoryPicture($fileName);
+            }
+
             $subCategoryRepository->add($subCategory, true);
 
             return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
@@ -65,6 +83,23 @@ class SubCategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form->get('sub_category_picture')->getData();
+
+            if ($file) {
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                try {
+                    $file->move(
+                        $this->getParameter('images_sub_category_directory'),
+                        $fileName
+                    );
+                } catch (FileException $e) {
+                    $e->getMessage();
+                }
+
+                $subCategory->setSubCategoryPicture($fileName);
+            }
+
             $subCategoryRepository->add($subCategory, true);
 
             return $this->redirectToRoute('app_sub_category_index', [], Response::HTTP_SEE_OTHER);
