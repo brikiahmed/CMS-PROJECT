@@ -36,12 +36,13 @@ class RegistrationController extends AbstractController
     {
         $email = $request->request->get('email');
         $password = $request->request->get('password');
-
+        $name = $request->request->get('name');
         if ($request->getMethod() == 'POST' && $email && $password) {
 
             try {
                 $user = new User();
                 $user->setEmail($email);
+                $user->setName($name);
                 $user->setPassword($userPasswordHasher->hashPassword($user, $password));
                 $entityManager->persist($user);
                 $entityManager->flush();

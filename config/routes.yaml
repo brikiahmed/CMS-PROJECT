@@ -7,7 +7,7 @@ search:
   controller: App\Controller\AccountsController::search
 
 app_accounts_delete:
-  path: /accounts/delete/{id}
+  path: /users/delete/{id}
   controller: App\Controller\AccountsController::delete
   methods: [POST]
 
