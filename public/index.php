@@ -14,7 +14,7 @@ return function (array $context) {
 
 // Redirect the user to the login page if accessing the root URL
     if ($request->getPathInfo() === '/') {
-        $response = new \Symfony\Component\HttpFoundation\RedirectResponse('/auth');
+        $response = new \Symfony\Component\HttpFoundation\RedirectResponse('/login');
         $response->send();
         exit();
     }

@@ -12,5 +12,5 @@ app_accounts_delete:
   methods: [POST]
 
 app_login:
-  path: /auth
-  controller: App\Controller\AuthController::login
+  path: /login
+  controller: App\Controller\SecurityController::login

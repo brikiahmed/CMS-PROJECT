@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/sub/category")
@@ -31,6 +32,11 @@ class SubCategoryController extends AbstractController
      */
     public function new(Request $request, SubCategoryRepository $subCategoryRepository): Response
     {
+
+        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         $subCategory = new SubCategory();
         $form = $this->createForm(SubCategoryType::class, $subCategory);
         $form->handleRequest($request);
@@ -69,6 +75,11 @@ class SubCategoryController extends AbstractController
      */
     public function show(SubCategory $subCategory): Response
     {
+
+        if (!$this->isGranted('ROLE_VIEWER')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         return $this->render('sub_category/show.html.twig', [
             'sub_category' => $subCategory,
         ]);
@@ -79,6 +90,11 @@ class SubCategoryController extends AbstractController
      */
     public function edit(Request $request, SubCategory $subCategory, SubCategoryRepository $subCategoryRepository): Response
     {
+
+        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         $form = $this->createForm(SubCategoryType::class, $subCategory);
         $form->handleRequest($request);
 
@@ -116,6 +132,11 @@ class SubCategoryController extends AbstractController
      */
     public function delete(Request $request, SubCategory $subCategory, SubCategoryRepository $subCategoryRepository): Response
     {
+
+        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$subCategory->getId(), $request->request->get('_token'))) {
             $subCategoryRepository->remove($subCategory, true);
         }

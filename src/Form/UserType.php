@@ -34,6 +34,7 @@ class UserType extends AbstractType
                 'choices' => [
                     'Viewer' => 'ROLE_VIEWER',
                     'Editor' => 'ROLE_EDITOR',
+                    'User' => 'ROLE_USER',
                 ],
                 'expanded' => true,
                 'constraints' => [

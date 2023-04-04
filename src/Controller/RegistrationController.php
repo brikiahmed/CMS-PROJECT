@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
-use App\Security\AppCustomAuthenticator;
 use App\Security\EmailVerifier;
+use App\Security\LoginFormAuthenticator;
 use Doctrine\DBAL\Driver\PDO\PDOException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -31,8 +31,14 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
+     * @param Request $request
+     * @param UserPasswordHasherInterface $userPasswordHasher
+     * @param UserAuthenticatorInterface $userAuthenticator
+     * @param LoginFormAuthenticator $authenticator
+     * @param EntityManagerInterface $entityManager
+     * @return Response
      */
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
         $email = $request->request->get('email');
         $password = $request->request->get('password');
@@ -43,10 +49,11 @@ class RegistrationController extends AbstractController
                 $user = new User();
                 $user->setEmail($email);
                 $user->setName($name);
+                $user->setRoles(['ROLE_USER']);
                 $user->setPassword($userPasswordHasher->hashPassword($user, $password));
                 $entityManager->persist($user);
                 $entityManager->flush();
-                return $this->redirectToRoute('app_auth');
+                return $this->redirectToRoute('app_login');
             } catch (PDOException $exception) {
                 $this->addFlash('waring', 'error');
             }
@@ -89,7 +96,6 @@ class RegistrationController extends AbstractController
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
-            dd($exception);
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
 
             return $this->redirectToRoute('app_register');
@@ -98,7 +104,7 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_auth');
+        return $this->redirectToRoute('app_login');
     }
 
 }

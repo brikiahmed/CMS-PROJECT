@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/categories")
@@ -34,6 +35,11 @@ class CategoriesController extends AbstractController
      */
     public function new(Request $request, CategoriesRepository $categoriesRepository): Response
     {
+
+        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         //$user = $this->getUser();
         $category = new Categories();
         $category->setAuthor('test');
@@ -71,20 +77,29 @@ class CategoriesController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="app_categories_show", methods={"GET"})
+     * @Route("/view/{id}", name="app_categories_show", methods={"GET"})
      */
     public function show(Categories $category): Response
     {
+        if (!$this->isGranted('ROLE_VIEWER')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         return $this->render('categories/show.html.twig', [
             'category' => $category,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="app_categories_edit", methods={"GET", "POST"})
+     * @Route("/edit/{id}", name="app_categories_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Categories $category, CategoriesRepository $categoriesRepository): Response
     {
+
+        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         $imageFilename = $category->getCategoryPicture();
         $imagePath = $this->getParameter('images_category_directory').'/'.$imageFilename;
         $imageFile = new File($imagePath);
@@ -125,6 +140,11 @@ class CategoriesController extends AbstractController
      */
     public function delete(Request $request, Categories $category, CategoriesRepository $categoriesRepository): Response
     {
+
+        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
             $categoriesRepository->remove($category, true);
         }
