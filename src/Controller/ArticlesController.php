@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/articles")
@@ -30,6 +31,10 @@ class ArticlesController extends AbstractController
      */
     public function new(Request $request, ArticlesRepository $articlesRepository): Response
     {
+        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         $article = new Articles();
         $form = $this->createForm(ArticlesType::class, $article);
         $form->handleRequest($request);
@@ -51,6 +56,10 @@ class ArticlesController extends AbstractController
      */
     public function show(Articles $article): Response
     {
+
+        if (!$this->isGranted('ROLE_VIEWER')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
         return $this->render('articles/show.html.twig', [
             'article' => $article,
         ]);
@@ -61,6 +70,10 @@ class ArticlesController extends AbstractController
      */
     public function edit(Request $request, Articles $article, ArticlesRepository $articlesRepository): Response
     {
+        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         $form = $this->createForm(ArticlesType::class, $article);
         $form->handleRequest($request);
 
@@ -81,6 +94,10 @@ class ArticlesController extends AbstractController
      */
     public function delete(Request $request, Articles $article, ArticlesRepository $articlesRepository): Response
     {
+        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
             $articlesRepository->remove($article, true);
         }

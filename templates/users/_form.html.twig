@@ -15,29 +15,6 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="article-title-input">Roles</label>
-                {{ form_widget(form.roles, {'attr': {'class': 'form-control'}}) }}
-                {% if form_errors(form.roles)is not empty %}
-                    <div class="alert alert-danger">
-                        {{ form_errors(form.roles) }}
-                    </div>
-                {% endif %}
-            </div>
-
-
-            <div class="mb-3">
-                <label class="form-label" for="url-input">Password</label>
-                {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
-                {% if form_errors(form.password)is not empty %}
-                    <div class="alert alert-danger">
-                        {{ form_errors(form.password) }}
-                    </div>
-                {% endif %}
-
-            </div>
-
-
-            <div class="mb-3">
                 <label class="form-label" for="body-input">Name</label>
                 {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter your name'}}) }}
                 {% if form_errors(form.name)is not empty %}
@@ -68,21 +45,32 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="body-input">Note</label>
-                {{ form_widget(form.note, {'attr': {'class': 'form-control'}}) }}
-                {% if form_errors(form.note)is not empty %}
+                <label class="form-label" for="url-input">Password</label>
+                {{ form_widget(form.password, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors(form.password)is not empty %}
                     <div class="alert alert-danger">
-                        {{ form_errors(form.note) }}
+                        {{ form_errors(form.password) }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="article-title-input">Roles</label>
+                {{ form_widget(form.roles) }}
+                {% if form_errors(form.roles)is not empty %}
+                    <div class="alert alert-danger">
+                        {{ form_errors(form.roles) }}
                     </div>
                 {% endif %}
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="body-input">Added on</label>
-                {{ form_widget(form.added_on, {'attr': {'class': 'form-control'}}) }}
-                {% if form_errors(form.added_on)is not empty %}
+                <label class="form-label" for="body-input">Note</label>
+                {{ form_widget(form.note, {'attr': {'class': 'form-control'}}) }}
+                {% if form_errors(form.note)is not empty %}
                     <div class="alert alert-danger">
-                        {{ form_errors(form.added_on) }}
+                        {{ form_errors(form.note) }}
                     </div>
                 {% endif %}
             </div>
@@ -97,12 +85,13 @@
                 {% endif %}
             </div>
 
+        </div>
+    </div>
+
             {{ form_widget(form) }}
             <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
 
             {{ form_end(form) }}
-
-        </div>
-    </div>
+    <a style="width: 10%; margin-left: auto" class="btn btn-primary" href="{{ path('app_accounts_index') }}">Back to list</a>
 
 {% endblock %}

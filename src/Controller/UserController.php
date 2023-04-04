@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Accounts;
-use App\Form\AccountsType;
-use App\Repository\AccountsRepository;
+use App\Entity\User;
+use App\Form\UserType;
+use App\Repository\UserRepository;
 use Gedmo\Sluggable\Util\Urlizer;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,17 +13,22 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * @Route("/accounts")
+ * @Route("/users")
  */
-class AccountsController extends AbstractController
+class UserController extends AbstractController
 {
     /**
      * @Route("/", name="app_accounts_index", methods={"GET"}, options={"expose"=true})
      */
-    public function index(AccountsRepository $accountsRepository, Request $request,  PaginatorInterface $paginator): Response
+    public function index(UserRepository $accountsRepository, Request $request, PaginatorInterface $paginator): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         $data = $accountsRepository->findAll();
         // Paginate the data
         $pagination = $paginator->paginate(
@@ -31,7 +36,7 @@ class AccountsController extends AbstractController
             $request->query->getInt('page', 1), // Current page number
             5 // Number of items to display per page
         );
-        return $this->render('accounts/index.html.twig', [
+        return $this->render('users/index.html.twig', [
             'pagination' => $pagination
         ]);
     }
@@ -39,10 +44,15 @@ class AccountsController extends AbstractController
     /**
      * @Route("/new", name="app_accounts_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, AccountsRepository $accountsRepository): Response
+    public function new(Request $request, UserRepository $accountsRepository): Response
     {
-        $account = new Accounts();
-        $form = $this->createForm(AccountsType::class, $account);
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
+        $account = new User();
+        $account->setAddedOn(new \DateTime());
+        $form = $this->createForm(UserType::class, $account);
         $form->handleRequest($request);
 
         if ($request->isMethod('POST')) {
@@ -68,7 +78,7 @@ class AccountsController extends AbstractController
                 $this->addFlash('danger', 'Submit failed.');
             }
         }
-        return $this->renderForm('accounts/new.html.twig', [
+        return $this->renderForm('users/new.html.twig', [
             'account' => $account,
             'form' => $form,
         ]);
@@ -77,9 +87,13 @@ class AccountsController extends AbstractController
     /**
      * @Route("/{id}", name="app_accounts_show", methods={"GET"})
      */
-    public function show(Accounts $account): Response
+    public function show(User $account): Response
     {
-        return $this->render('accounts/show.html.twig', [
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
+        return $this->render('users/show.html.twig', [
                 'account' => $account,
         ]);
     }
@@ -87,9 +101,13 @@ class AccountsController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_accounts_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Accounts $account, AccountsRepository $accountsRepository): Response
+    public function edit(Request $request, User $account, UserRepository $accountsRepository): Response
     {
-        $form = $this->createForm(AccountsType::class, $account);
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
+        $form = $this->createForm(UserType::class, $account);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->isValid()) {
@@ -115,7 +133,7 @@ class AccountsController extends AbstractController
             }
         }
 
-        return $this->renderForm('accounts/edit.html.twig', [
+        return $this->renderForm('users/edit.html.twig', [
             'account' => $account,
             'form' => $form,
         ]);
@@ -124,8 +142,12 @@ class AccountsController extends AbstractController
     /**
      * @Route("/delete/{id}", name="app_accounts_delete", methods={"POST"})
      */
-    public function delete(Request $request, Accounts $account, AccountsRepository $accountsRepository): Response
+    public function delete(Request $request, User $account, UserRepository $accountsRepository): Response
     {
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException('You do not have access to this page.');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$account->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($account);
@@ -138,7 +160,7 @@ class AccountsController extends AbstractController
     /**
      * @Route("/search", name="search", methods={"GET"}, options={"expose"=true})
      */
-    public function search(Request $request, AccountsRepository $accountsRepository)
+    public function search(Request $request, UserRepository $accountsRepository)
     {
         $query = $request->query->get('query');
         $accounts = $accountsRepository->findByString($query);

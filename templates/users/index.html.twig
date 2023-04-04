@@ -84,7 +84,7 @@
                 <td>{{ account.id }}</td>
                 <td>{{ account.name }}</td>
                 <td>{{ account.email }}</td>
-                <td>{{ account.roles ? account.roles|json_encode : '' }}</td>
+                <td>{{ account.roles[0] == "ROLE_EDITOR" ? "Editor" : "Viewer" }} </td>
                 <td>{{ account.addedOn ? account.addedOn|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('app_accounts_edit', {'id': account.id}) }}"><button class="btn btn-outline-success btn-border"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></button></a>
@@ -176,8 +176,8 @@
                                                 '<td>'+value[3].date.split(' ')[0]+'</td>' +
                                                 '<td>' +
                                                 '<a href="' +id + '/edit"><button class="btn btn-outline-success btn-border"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></button></a>' +
-                                                '<a href="/accounts/' +id + '"><button class="btn btn-soft-danger btn-border" data-bs-toggle="modal" data-bs-target="#topmodal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></button></a>' +
-                                                '<a href="/accounts/' +id + '"><button class="btn btn-outline-secondary btn-border"> <i class="ri-eye-fill align-bottom me-2 text-muted"></i></button></a>' +
+                                                '<a href="/users/' +id + '"><button class="btn btn-soft-danger btn-border" data-bs-toggle="modal" data-bs-target="#topmodal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></button></a>' +
+                                                '<a href="/users/' +id + '"><button class="btn btn-outline-secondary btn-border"> <i class="ri-eye-fill align-bottom me-2 text-muted"></i></button></a>' +
                                                 '</td>' +
                                                 '</tr>');
                                         }
