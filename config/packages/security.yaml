@@ -42,9 +42,10 @@ security:
         - { path: ^/view/, roles: ROLE_VIEWER }
         - { path: ^/front/, roles: ROLE_USER }
     role_hierarchy:
-        ROLE_ADMIN: [ROLE_EDITOR]
-        ROLE_EDITOR: [ROLE_VIEWER]
-        ROLE_VIEWER: [ROLE_USER]
+        ROLE_ADMIN: [ROLE_ADMIN]
+        ROLE_EDITOR: [ROLE_VIEWER, ROLE_EDITOR]
+        ROLE_VIEWER: [ROLE_VIEWER]
+        ROLE_USER: [ROLE_USER]
 
 when@test:
     security:
