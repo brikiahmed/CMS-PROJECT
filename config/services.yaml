@@ -10,6 +10,11 @@ parameters:
 # config/services.yaml
 
 services:
+    App\Service\FormBuilder:
+        autowire: true
+        autoconfigure: true
+        public: false
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
