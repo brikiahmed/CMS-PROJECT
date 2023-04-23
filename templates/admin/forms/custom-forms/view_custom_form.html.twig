@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">{{ form.title }}</h4>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="card">
+
+            {% for field in form.fields %}
+                {% if field.label is same as "password" %}
+                    <div class="mb-3">
+                        <label class="form-label" for="password-input">Password</label>
+                        <div class="position-relative auth-pass-inputgroup">
+                            <input type="password" class="form-control pe-5 password-input" name ="password" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                            <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
+                            <div class="invalid-feedback">
+                                Please enter password
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="mb-3">
+                        <label for="useremail" class="form-label">{{field.label}} <span class="text-danger">*</span></label>
+                        <input type="{{ field.type }}" class="form-control" id="useremail" name="{{field.type}}" placeholder="Enter {{ field.label }}" required>
+                        <div class="invalid-feedback">
+                            Please enter {{field.label}}
+                        </div>
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+
+
+        </div>
+    </div>
+    {% for button in form.buttons %}
+        <a type="submit" class="btn {{button.type}}" href="{{ path(button.path) }}">{{ button.label }}</a>
+    {% endfor %}
+
+{% endblock %}

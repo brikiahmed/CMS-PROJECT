@@ -41,7 +41,7 @@ class TemplateFormRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return RegistrationForm[] Returns an array of RegistrationForm objects
+//     * @return CmsForm[] Returns an array of CmsForm objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -55,7 +55,7 @@ class TemplateFormRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?RegistrationForm
+//    public function findOneBySomeField($value): ?CmsForm
 //    {
 //        return $this->createQueryBuilder('r')
 //            ->andWhere('r.exampleField = :val')

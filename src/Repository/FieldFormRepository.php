@@ -2,8 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\FieldForm;
-use App\Entity\RegistrationForm;
+use App\Entity\CustomForm\FieldForm;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -41,7 +40,7 @@ class FieldFormRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return RegistrationForm[] Returns an array of RegistrationForm objects
+//     * @return CmsForm[] Returns an array of CmsForm objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -55,7 +54,7 @@ class FieldFormRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?RegistrationForm
+//    public function findOneBySomeField($value): ?CmsForm
 //    {
 //        return $this->createQueryBuilder('r')
 //            ->andWhere('r.exampleField = :val')

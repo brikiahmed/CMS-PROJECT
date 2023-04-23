@@ -1,0 +1,262 @@
+{% extends 'base.html.twig' %}
+{% block title %}Add new form{% endblock %}
+
+{% block content %}
+
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 32px;
+            height: 20px;
+        }
+
+        .switch-input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .switch-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            cursor: pointer;
+            background-color: #ccc; /* Set the background color for the switch button */
+            border-radius: 17px; /* Set the border radius for the switch button */
+        }
+
+        .switch-label::before {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 10px; /* Set the width of the switch button's handle */
+            height: 10px; /* Set the height of the switch button's handle */
+            background-color: #fff; /* Set the color of the switch button's handle */
+            border-radius: 15px; /* Set the border radius of the switch button's handle */
+            transition: left 0.2s; /* Add transition effect for smooth animation */
+        }
+
+        .switch-input:checked + .switch-label {
+            background-color: #0f0; /* Set the background color for the checked state */
+        }
+
+        .switch-input:checked + .switch-label::before {
+            left: 28px; /* Set the position of the switch button's handle for the checked state */
+        }
+
+        #fields-input {
+            background-color: #e5e5e5;
+        }
+
+        #buttons-input {
+            background-color: #e5e5e5;
+        }
+    </style>
+
+    <h2>Create New Custom Form</h2>
+    {{ form_start(form.fields) }}
+    <div class="mb-3" style="margin-left: 90%">
+        <label class="form-label" for="article-title-input">is active</label>
+        {{ form_widget(form.isEnabled, {'attr': {'class': 'checkbox'}}) }}
+        {% if form_errors(form.isEnabled)is not empty %}
+            <div class="alert alert-danger">
+                {{ form_errors(form.isEnabled) }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Title Form</label>
+        {{ form_widget(form.title, {'attr': {'class': 'form-control', 'placeholder': 'Enter title'}}) }}
+        {% if form_errors(form.title)is not empty %}
+            <div class="alert alert-danger">
+                {{ form_errors(form.title) }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Choose fields</h3>
+        </div>
+        <div id="fields-container" class="card-body">
+            {% for field in form.fields %}
+                    {{ form_row(field.label, {'attr': {'class': 'col form-control'}}) }}
+                    {{ form_row(field.type, {'attr': {'class': 'col form-control'}}) }}
+                    {{ form_row(field.isRequired, {'attr': {'class': 'switch form-check'}}) }}
+            {% endfor %}
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-primary add-field-button">Add Field</button>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Add button form</h3>
+        </div>
+        <div id="buttons-container" class="card-body">
+            {% for field in form.buttons %}
+                {{ form_row(field.label, {'attr': {'class': 'col form-control'}}) }}
+                {{ form_row(field.type, {'attr': {'class': 'col form-control'}}) }}
+                {{ form_row(field.path, {'attr': {'class': 'col form-control'}}) }}
+            {% endfor %}
+            <br>
+        </div>
+        <div class="card-footer">
+            <button style="width: 13%;" type="button" class="btn btn-primary add-button-submit">Add Button</button>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var $fieldsContainer = $('#fields-container');
+            var $buttonsContainer = $('#buttons-container');
+            var $addButton = $('.add-field-button');
+            var $addButtonSubmit = $('.add-button-submit');
+            $addButtonSubmit.click(function () {
+                var buttonCount = $buttonsContainer.children().length;
+
+                var $labelButton = $('<input>')
+                    .addClass('col')
+                    .attr('type', 'text')
+                    .attr('name', 'buttons[' + buttonCount + '][label]')
+                    .attr('placeholder', 'Label')
+                    .addClass('form-control')
+                    .css('margin-right', '10px'); // Add desired margin value
+
+                var $typeButton = $('<select>')
+                    .addClass('col')
+                    .attr('name', 'buttons[' + buttonCount + '][type]')
+                    .addClass('form-control')
+                    .append($('<option>').attr('value', 'btn-primary').text('Primary Button')) // Add the desired button class as an option
+                    .append($('<option>').attr('value', 'btn-secondary').text('Secondary Button'))
+                    .append($('<option>').attr('value', 'btn-success').text('Success Button'))
+                    .append($('<option>').attr('value', 'btn-danger').text('Danger Button'))
+                    .append($('<option>').attr('value', 'btn-warning').text('Warning Button'));
+
+                var $routeButton = $('<select>')
+                    .addClass('col')
+                    .attr('name', 'buttons[' + buttonCount + '][path]')
+                    .addClass('form-control');
+
+                // Fetch the routes data
+                fetch('/api/routes')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Loop through the route names and create an option for each one
+                        Object.keys(data).forEach(function(name) {
+                            $routeButton.append($('<option>').attr('value', name).text(name));
+                        });
+                    })
+                    .catch(error => console.error(error));
+
+                var $removeFieldButton = $('<button>')
+                    .attr('type', 'button')
+                    .addClass('btn btn-danger remove-button-submit')
+                    .text('Remove button')
+                    .css('width', '118px')
+                    .click(function() {
+                        $(this).closest('.button-container').remove();
+                    });
+
+
+                var $buttonContainer = $('<div id="buttons-input" class="container card row g-lg-2">')
+
+                    .addClass('button-container')
+
+                    .append($labelButton) // Append the label container
+                    .append($typeButton)
+                    .append($routeButton)
+                    .append($removeFieldButton);
+
+                $buttonsContainer.append($buttonContainer);
+            });
+
+            $addButton.click(function() {
+                var fieldCount = $fieldsContainer.children().length / 4;
+                var $requiredLabel = $('<label>')
+                    .addClass('col')
+                    .attr('for', 'fields[' + fieldCount + '][isRequired]')
+                    .text('is required ?');
+
+
+                var $labelInput = $('<input>')
+                    .addClass('col')
+                    .attr('type', 'text')
+                    .attr('name', 'fields[' + fieldCount + '][label]')
+                    .attr('placeholder', 'Label')
+                    .addClass('form-control')
+                    .css('margin-right', '10px'); // Add desired margin value
+
+                var $label = $('<label>')
+                    .addClass('col')
+                    .attr('for', 'fields[' + fieldCount + '][label]')
+                    .text('Label Text');
+
+                var $labelContainer = $('<div>')
+                    .addClass('label-container')
+                    .append($label);
+
+                var $typeSelect = $('<select>')
+                    .addClass('col')
+                    .attr('name', 'fields[' + fieldCount + '][type]')
+                    .addClass('form-control')
+                    .append($('<option>').attr('value', 'text').text('Text'))
+                    .append($('<option>').attr('value', 'email').text('Email'))
+                    .append($('<option>').attr('value', 'password').text('Password'))
+                    .append($('<option>').attr('value', 'checkbox').text('Checkbox'))
+                    .append($('<option>').attr('value', 'select').text('Select'))
+                    .append($('<option>').attr('value', 'textarea').text('Textarea'));
+
+                var $isRequiredInput = $('<input>')
+                    .addClass('switch')
+                    .attr('type', 'checkbox')
+                    .attr('name', 'fields[' + fieldCount + '][isRequired]')
+                    .addClass('form-check');
+
+                var $removeFieldButton = $('<button>')
+                    .attr('type', 'button')
+                    .addClass('btn btn-danger remove-field-button')
+                    .text('Remove Field')
+                    .css('width', '118px')
+                    .click(function() {
+                        $(this).closest('.field-container').remove();
+                    });
+
+                var $requiredContainer = $('<div>')
+
+                    .addClass('required-container')
+                    .append($requiredLabel)
+                    .append($isRequiredInput);
+
+                var $fieldContainer = $('<div id="fields-input" class="container card row g-lg-2">')
+
+                    .addClass('field-container')
+
+                    .append($labelContainer) // Append the label container
+                    .append($labelInput)
+
+
+                    .append($typeSelect)
+
+                    .append($requiredContainer) // Append the label container
+                    .append($isRequiredInput)
+                    .append($removeFieldButton);
+
+                $fieldsContainer.append($fieldContainer);
+            });
+        });
+
+    </script>
+{% endblock %}

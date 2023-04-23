@@ -4,8 +4,9 @@
 
 namespace App\Form;
 
-use App\Entity\FieldForm;
+use App\Entity\CustomForm\FieldForm;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -24,18 +25,21 @@ class AdminFieldType extends AbstractType
                 'label' => 'Field Type',
                 'choices' => [
                     'Text' => 'text',
-                    'Date' => 'date',
+                    'Email' => 'email',
+                    'Password' => 'password',
                     'Checkbox' => 'checkbox',
+                    'Select' => 'select',
+                    'Textarea' => 'textarea',
+                    'Date' => 'date',
                     // add more field types as needed
                 ],
             ])
-            ->add('options', CollectionType::class, [
-                'entry_type' => TextType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'label' => 'Field Options (comma-separated)',
+            ->add('isRequired', CheckboxType::class, [
+                'label' => 'Is required ?',
+                'attr' => [
+                    'class' => 'switch-input' // Add any additional CSS classes as needed
+                ],
+                'required' => false, // Make it optional
             ]);
     }
 

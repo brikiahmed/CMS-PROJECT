@@ -816,7 +816,11 @@
                         <div class="collapse menu-dropdown" id="formList">
                             <ul class="nav nav-sm flex-column">
                                 <li class="nav-item">
-                                    <a href={{ path('admin_registration_form_new') }} class="nav-link" data-key="t-horizontal">Create new Form</a>
+                                    <a href={{ path('admin_form_new') }} class="nav-link" data-key="t-horizontal">Create new Form</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a href={{ path('admin_form_index') }} class="nav-link" data-key="t-horizontal">List Forms</a>
                                 </li>
 
                                 <a class="nav-link menu-link" href="#useTemplateMenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
@@ -826,13 +830,13 @@
                                 <div class="collapse menu-dropdown" id="useTemplateMenu">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ path('admin_template_registration_form_edit', {'id': 1}) }}" class="nav-link" data-key="t-horizontal">Registrations Form</a>
+                                            <a href="{{ path('admin_template_form_edit', {'id': 1, 'templatePath' : 'register'}) }}" class="nav-link" data-key="t-horizontal">Registrations Form</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ path('admin_registration_form_view', {'id': 2}) }}" class="nav-link" data-key="t-horizontal">Login Form</a>
+                                            <a href="{{ path('admin_template_form_edit', {'id': 2, 'templatePath' : 'login'}) }}" class="nav-link" data-key="t-horizontal">Login Form</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ path('admin_registration_form_view', {'id': 2}) }}" class="nav-link" data-key="t-horizontal">Contact Form</a>
+                                            <a href="{{ path('admin_template_form_edit', {'id': 3, 'templatePath' : 'contact-us'}) }}" class="nav-link" data-key="t-horizontal">Contact Form</a>
                                         </li>
                                     </ul>
                                 </div>

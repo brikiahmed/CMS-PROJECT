@@ -13,9 +13,18 @@ app_accounts_delete:
 
 app_login:
   path: /login
-  controller: App\Controller\SecurityController::login
+  controller: App\Controller\admin\SecurityController::login
 
-admin_registration_form_view:
-  path: /admin/registration-form/view/{id}
-  controller: App\Controller\RegistrationFormController::show
+admin_form_view:
+  path: /admin/form/view/{id}
+  controller: App\Controller\admin\CmsFormsController::show
   methods: [GET]
+
+admin_template_form_edit:
+  path: /admin/template/{templatePath}/edit/{id}
+  controller: App\Controller\admin\TemplateFormController::edit
+  methods: [POST, GET]
+
+api_routes:
+  path: /api/routes
+  controller: App\Controller\admin\CmsFormsController::getRoutes

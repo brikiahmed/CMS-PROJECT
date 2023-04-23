@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\CustomForm;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class RegistrationForm
+class CmsForm
 {
     /**
      * @ORM\Id
@@ -24,13 +24,24 @@ class RegistrationForm
     private $title;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isEnabled;
+
+    /**
      * @ORM\OneToMany(targetEntity="FieldForm", mappedBy="form", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     private $fields;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ButtonsForm", mappedBy="form", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $buttons;
+
     public function __construct()
     {
         $this->fields = new ArrayCollection();
+        $this->buttons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -46,6 +57,18 @@ class RegistrationForm
     public function setTitle(string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function getIsEnabled(): ?bool
+    {
+        return $this->isEnabled;
+    }
+
+    public function setIsEnabled(bool $isEnabled): self
+    {
+        $this->isEnabled = $isEnabled;
 
         return $this;
     }
@@ -71,6 +94,36 @@ class RegistrationForm
     public function removeField(FieldForm $field): self
     {
         if ($this->fields->removeElement($field)) {
+            // set the owning side to null (unless already changed)
+            if ($field->getForm() === $this) {
+                $field->setForm(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ButtonsForm[]
+     */
+    public function getButtons(): Collection
+    {
+        return $this->buttons;
+    }
+
+    public function addButton(ButtonsForm $field): self
+    {
+        if (!$this->buttons->contains($field)) {
+            $field->setForm($this);
+            $this->buttons[] = $field;
+        }
+
+        return $this;
+    }
+
+    public function removeButton(ButtonsForm $field): self
+    {
+        if ($this->buttons->removeElement($field)) {
             // set the owning side to null (unless already changed)
             if ($field->getForm() === $this) {
                 $field->setForm(null);

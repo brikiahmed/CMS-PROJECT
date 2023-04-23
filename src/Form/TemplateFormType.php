@@ -3,6 +3,7 @@ namespace App\Form;
 
 use App\Entity\TemplateForm;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,13 +20,11 @@ class TemplateFormType extends AbstractType
                 // Add any other options or constraints as needed
             ])
             // Other fields in your form
-            ->add('isEnabled', ChoiceType::class, [
+            ->add('isEnabled', CheckboxType::class, [
                 'label' => 'Enable Template for Users',
-                'choices' => [
-                    'Yes' => true,
-                    'No' => false,
+                'attr' => [
+                    'class' => 'switch-input' // Add any additional CSS classes as needed
                 ],
-                'expanded' => true, // Render as radio buttons
                 'required' => false, // Make it optional
             ]);
     }

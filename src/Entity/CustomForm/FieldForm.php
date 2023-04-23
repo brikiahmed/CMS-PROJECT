@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\CustomForm;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,12 +27,12 @@ class FieldForm
     private $type;
 
     /**
-     * @ORM\Column(type="json", nullable=true)
+     * @ORM\Column(type="boolean")
      */
-    private $options;
+    private $isRequired;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RegistrationForm", inversedBy="fields")
+     * @ORM\ManyToOne(targetEntity="CmsForm", inversedBy="fields")
      * @ORM\JoinColumn(nullable=false)
      */
     private $form;
@@ -66,24 +66,24 @@ class FieldForm
         return $this;
     }
 
-    public function getOptions(): ?array
+    public function getIsRequired(): ?bool
     {
-        return $this->options;
+        return $this->isRequired;
     }
 
-    public function setOptions(?array $options): self
+    public function setIsRequired(bool $isRequired): self
     {
-        $this->options = $options;
+        $this->isRequired = $isRequired;
 
         return $this;
     }
 
-    public function getForm(): ?RegistrationForm
+    public function getForm(): ?CmsForm
     {
         return $this->form;
     }
 
-    public function setForm(?RegistrationForm $form): self
+    public function setForm(?CmsForm $form): self
     {
         $this->form = $form;
 

@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\RegistrationForm;
+use App\Entity\CustomForm\CmsForm;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<RegistrationForm>
+ * @extends ServiceEntityRepository<CmsForm>
  *
- * @method RegistrationForm|null find($id, $lockMode = null, $lockVersion = null)
- * @method RegistrationForm|null findOneBy(array $criteria, array $orderBy = null)
- * @method RegistrationForm[]    findAll()
- * @method RegistrationForm[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CmsForm|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CmsForm|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CmsForm[]    findAll()
+ * @method CmsForm[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RegistrationFormRepository extends ServiceEntityRepository
+class CmsFormRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, RegistrationForm::class);
+        parent::__construct($registry, CmsForm::class);
     }
 
-    public function add(RegistrationForm $entity, bool $flush = false): void
+    public function add(CmsForm $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class RegistrationFormRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(RegistrationForm $entity, bool $flush = false): void
+    public function remove(CmsForm $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class RegistrationFormRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return RegistrationForm[] Returns an array of RegistrationForm objects
+//     * @return CmsForm[] Returns an array of CmsForm objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class RegistrationFormRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?RegistrationForm
+//    public function findOneBySomeField($value): ?CmsForm
 //    {
 //        return $this->createQueryBuilder('r')
 //            ->andWhere('r.exampleField = :val')

@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
- * @Route("/users")
+ * @Route("admin/users")
  */
 class UserController extends AbstractController
 {
@@ -36,7 +36,7 @@ class UserController extends AbstractController
             $request->query->getInt('page', 1), // Current page number
             5 // Number of items to display per page
         );
-        return $this->render('users/index.html.twig', [
+        return $this->render('admin/users/index.html.twig', [
             'pagination' => $pagination
         ]);
     }
@@ -78,7 +78,7 @@ class UserController extends AbstractController
                 $this->addFlash('danger', 'Submit failed.');
             }
         }
-        return $this->renderForm('users/new.html.twig', [
+        return $this->renderForm('admin/users/new.html.twig', [
             'account' => $account,
             'form' => $form,
         ]);
@@ -93,7 +93,7 @@ class UserController extends AbstractController
             throw new AccessDeniedException('You do not have access to this page.');
         }
 
-        return $this->render('users/show.html.twig', [
+        return $this->render('admin/users/show.html.twig', [
                 'account' => $account,
         ]);
     }
@@ -133,7 +133,7 @@ class UserController extends AbstractController
             }
         }
 
-        return $this->renderForm('users/edit.html.twig', [
+        return $this->renderForm('admin/users/edit.html.twig', [
             'account' => $account,
             'form' => $form,
         ]);
