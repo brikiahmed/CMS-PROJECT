@@ -13,7 +13,15 @@ app_accounts_delete:
 
 app_login:
   path: /login
-  controller: App\Controller\admin\SecurityController::login
+  controller: App\Controller\SecurityController::login
+  methods: [POST, GET]
+
+
+app_register:
+  path: /register
+  controller: App\Controller\RegistrationController::register
+  methods: [POST, GET]
+
 
 admin_form_view:
   path: /admin/form/view/{id}

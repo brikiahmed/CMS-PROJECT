@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\admin;
+namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -30,7 +30,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("admin/register", name="app_register")
+     * @Route("/register", name="app_front_register")
      * @param Request $request
      * @param UserPasswordHasherInterface $userPasswordHasher
      * @param UserAuthenticatorInterface $userAuthenticator
@@ -64,7 +64,7 @@ class RegistrationController extends AbstractController
                     ->from(new Address('sender@example.com', 'Acme Mail Bot'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
-                    ->htmlTemplate('admin/registration/confirmation_email.html.twig')
+                    ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
             $userAuthenticator->authenticateUser(
@@ -77,7 +77,7 @@ class RegistrationController extends AbstractController
 
         }
 
-        return $this->render('registration/register.html.twig');
+        return $this->render('admin/registration/register.html.twig');
     }
 
     /**
