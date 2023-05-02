@@ -31,7 +31,7 @@ class ArticlesController extends AbstractController
      */
     public function new(Request $request, ArticlesRepository $articlesRepository): Response
     {
-        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+        if (!$this->isGranted('ROLE_EDITOR') && !$this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedException('You do not have access to this page.');
         }
 

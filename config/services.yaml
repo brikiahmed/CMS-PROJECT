@@ -10,11 +10,31 @@ parameters:
 # config/services.yaml
 
 services:
+    Doctrine\Migrations\Configuration\Configuration:
+        arguments:
+            - '%kernel.project_dir%/migrations'
+    Doctrine\Migrations\Generator\Generator:
+        arguments:
+            - '@Doctrine\Migrations\Configuration\Configuration'
     App\Service\FormBuilder:
         autowire: true
         autoconfigure: true
         public: false
 
+    App\Service\GenerateEntityService:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    App\Service\GenerateFormTypeService:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    App\Command\GenerateControllerService:
+        autowire: true
+        autoconfigure: true
+        public: false
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

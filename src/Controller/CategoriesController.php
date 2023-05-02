@@ -36,7 +36,7 @@ class CategoriesController extends AbstractController
     public function new(Request $request, CategoriesRepository $categoriesRepository): Response
     {
 
-        if (!$this->isGranted('ROLE_EDITOR') || !$this->isGranted('ROLE_ADMIN')) {
+        if (!$this->isGranted('ROLE_EDITOR') && !$this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedException('You do not have access to this page.');
         }
 

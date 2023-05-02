@@ -64,21 +64,24 @@ class FormBuilderService
         $form = new CmsForm();
         $form->setTitle($title);
         $form->setIsEnabled($isEnabled);
-
-        foreach ($fields['fields'] as $fieldData) {
-            $field = new FieldForm();
-            $field->setLabel($fieldData['label']);
-            $field->setType($fieldData['type']);
-            $field->setIsRequired($fieldData['isRequired']);
-            $form->addField($field);
+        if (isset($fields['fields'])) {
+            foreach ($fields['fields'] as $fieldData) {
+                $field = new FieldForm();
+                $field->setLabel($fieldData['label']);
+                $field->setType($fieldData['type']);
+                $field->setIsRequired($fieldData['isRequired'] ?? 0);
+                $form->addField($field);
+            }
         }
 
-        foreach ($fields['buttons'] as $button) {
-            $field = new ButtonsForm();
-            $field->setLabel($button['label']);
-            $field->setType($button['type']);
-            $field->setPath($button['path']);
-            $form->addButton($field);
+        if (isset($fields['buttons'])) {
+            foreach ($fields['buttons'] as $button) {
+                $field = new ButtonsForm();
+                $field->setLabel($button['label']);
+                $field->setType($button['type']);
+                $field->setPath($button['path']);
+                $form->addButton($field);
+            }
         }
 
         $this->em->persist($form);

@@ -4,6 +4,7 @@
 
 namespace App\Controller\admin;
 
+use App\Command\CreateEntityAndMigrationCommand;
 use App\Entity\Categories;
 use App\Entity\CustomForm\CmsForm;
 use App\Entity\User;
@@ -15,8 +16,18 @@ use App\Repository\CmsFormRepository;
 use App\Repository\FieldFormRepository;
 use App\Repository\UserRepository;
 use App\Service\FormBuilderService;
+use App\Service\GenerateControllerService;
+use App\Service\GenerateEntityService;
+use App\Service\GenerateFormTypeService;
+use App\Service\GenerateRepositoryService;
+use App\Service\GenerateTemplateService;
+use App\Service\MigrationGenerator;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +65,14 @@ class CmsFormsController extends AbstractController
     /**
      * @Route("/form/new", name="admin_form_new")
      */
-    public function new(Request $request, FormBuilderService $formBuilderService)
+    public function new(Request $request,
+                        FormBuilderService $formBuilderService,
+                        EntityManagerInterface $entityManager,
+                        GenerateRepositoryService $generateRepositoryService,
+                        GenerateEntityService $generateEntityService,
+                        GenerateFormTypeService $generateFormTypeService,
+                        GenerateControllerService $generateControllerService,
+                        GenerateTemplateService $generateTemplateService)
     {
 
         $formatedData = [];
@@ -70,6 +88,37 @@ class CmsFormsController extends AbstractController
             $formatedData['fields'] = $fields;
             $formatedData['buttons'] = $buttons;
             $idForm = $formBuilderService->createForm($title, $isEnabled ,$formatedData);
+
+
+            // Create a new instance of the command
+            $command = new CreateEntityAndMigrationCommand($entityManager,
+                $generateEntityService, $generateFormTypeService,
+                $generateRepositoryService, $generateControllerService, $generateTemplateService);
+
+// Create a new instance of the Application
+            $application = new Application();
+
+            // Add the command to the Application
+            $application->add($command);
+
+            // Set the input arguments
+            $arguments = [
+                'command' => 'app:create-entity-and-migration',
+                'entityName' => $title,
+                'fields' => $fields,
+            ];
+
+            // Create a new instance of the ArrayInput with the arguments
+            $input = new ArrayInput($arguments);
+
+            // Create a new instance of the BufferedOutput to capture the output of the command
+            $output = new BufferedOutput();
+            // Run the command with the input and output
+            $application->run($input, $output);
+
+            // Get the output of the command
+            $outputText = $output->fetch();
+            dd($output);
 
             return $this->redirectToRoute('admin_form_index', ['id' => $idForm->getId()]);
 
