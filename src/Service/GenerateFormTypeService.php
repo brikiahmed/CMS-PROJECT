@@ -13,7 +13,7 @@ class GenerateFormTypeService
         'string' => 'TextType',
         'text' => 'TextareaType',
         'integer' => 'IntegerType',
-        // add more field types and their corresponding form types as needed
+        'boolean' => 'CheckboxType',
     ];
 
     private $entityManager;

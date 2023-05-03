@@ -80,9 +80,7 @@ class CreateEntityAndMigrationCommand extends Command
         $input = new ArrayInput($arguments);
         $command->run($input, $output);
 
+        return $output->writeln('Entity and migration created successfully.');
 
-        $output->writeln('Entity and migration created successfully.');
-
-        return Command::SUCCESS;
     }
 }

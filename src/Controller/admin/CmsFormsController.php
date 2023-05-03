@@ -64,6 +64,7 @@ class CmsFormsController extends AbstractController
 
     /**
      * @Route("/form/new", name="admin_form_new")
+     * @throws \Exception
      */
     public function new(Request $request,
                         FormBuilderService $formBuilderService,
@@ -95,12 +96,11 @@ class CmsFormsController extends AbstractController
                 $generateEntityService, $generateFormTypeService,
                 $generateRepositoryService, $generateControllerService, $generateTemplateService);
 
-// Create a new instance of the Application
+            // Create a new instance of the Application
             $application = new Application();
 
             // Add the command to the Application
             $application->add($command);
-
             // Set the input arguments
             $arguments = [
                 'command' => 'app:create-entity-and-migration',
@@ -111,14 +111,8 @@ class CmsFormsController extends AbstractController
             // Create a new instance of the ArrayInput with the arguments
             $input = new ArrayInput($arguments);
 
-            // Create a new instance of the BufferedOutput to capture the output of the command
-            $output = new BufferedOutput();
-            // Run the command with the input and output
-            $application->run($input, $output);
-
-            // Get the output of the command
-            $outputText = $output->fetch();
-            dd($output);
+            // Create a new instance of the BufferedOutput
+            $application->run($input);
 
             return $this->redirectToRoute('admin_form_index', ['id' => $idForm->getId()]);
 

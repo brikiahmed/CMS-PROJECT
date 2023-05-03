@@ -5,6 +5,7 @@
 namespace App\Service;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\Migrations\Tools\Console\Command\GenerateCommand;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -46,7 +47,7 @@ class GenerateEntityService
             $lowerFieldName = strtolower($fieldName);
             // Generate the entity property
             $properties .= "\n    /**\n";
-            $properties .= "     * @ORM\\Column(type=\"$lowerFieldName\")\n";
+            $properties .= "     * @ORM\\Column(type=\"$fieldType\")\n";
             $properties .= "     */\n";
             $properties .= "    private \$$lowerFieldName;\n";
 
@@ -143,14 +144,15 @@ EOF;
         foreach ($columns as $column) {
             if ($column === 'id') {
                 $content .= 'id INT AUTO_INCREMENT NOT NULL';
+            } else if ($column !== 'id') {
+                $content .= $column . ' ' . ($metadata->getTypeOfField($column) === 'string' ? 'varchar(255)' : 'varchar(255)')  . ' NOT NULL';
             }
-            $content .= $column . ' ' . $metadata->getTypeOfColumn($column) === 'string' ? 'varchar(255)' : 'varchar(255)'  . ' NOT NULL';
             if ($i < count($columns) - 1) {
                 $content .= ', ';
             }
             $i++;
         }
-        $content .= "PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');\n";
+        $content .= ", PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');\n";
         $content .= "    }\n\n";
         $content .= "    public function down(Schema \$schema) : void\n";
         $content .= "    {\n";
