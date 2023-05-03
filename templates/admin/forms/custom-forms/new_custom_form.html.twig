@@ -135,22 +135,6 @@
                     .append($('<option>').attr('value', 'btn-danger').text('Danger Button'))
                     .append($('<option>').attr('value', 'btn-warning').text('Warning Button'));
 
-                var $routeButton = $('<select>')
-                    .addClass('col')
-                    .attr('name', 'buttons[' + buttonCount + '][path]')
-                    .addClass('form-control');
-
-                // Fetch the routes data
-                fetch('/api/routes')
-                    .then(response => response.json())
-                    .then(data => {
-                        // Loop through the route names and create an option for each one
-                        Object.keys(data).forEach(function(name) {
-                            $routeButton.append($('<option>').attr('value', name).text(name));
-                        });
-                    })
-                    .catch(error => console.error(error));
-
                 var $removeFieldButton = $('<button>')
                     .attr('type', 'button')
                     .addClass('btn btn-danger remove-button-submit')
@@ -167,7 +151,6 @@
 
                     .append($labelButton) // Append the label container
                     .append($typeButton)
-                    .append($routeButton)
                     .append($removeFieldButton);
 
                 $buttonsContainer.append($buttonContainer);

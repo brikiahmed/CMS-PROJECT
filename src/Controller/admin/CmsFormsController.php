@@ -112,10 +112,11 @@ class CmsFormsController extends AbstractController
             $input = new ArrayInput($arguments);
 
             // Create a new instance of the BufferedOutput
-            $application->run($input);
-
-            return $this->redirectToRoute('admin_form_index', ['id' => $idForm->getId()]);
-
+            try {
+                $application->run($input);
+            } catch (\Exception $exception) {
+                return $this->redirectToRoute('admin_form_index', ['id' => $idForm->getId()]);
+            }
         }
         return $this->render('admin/forms/custom-forms/new_custom_form.html.twig', [
             'form' => $form->createView(),

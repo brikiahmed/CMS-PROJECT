@@ -44,7 +44,7 @@ class GenerateEntityService
         foreach ($fields as $field) {
             $fieldName = $this->formatFieldName($field['label']);
             $fieldType = $field['type'];
-            $lowerFieldName = strtolower($fieldName);
+            $lowerFieldName = lcfirst($fieldName);
             // Generate the entity property
             $properties .= "\n    /**\n";
             $properties .= "     * @ORM\\Column(type=\"$fieldType\")\n";

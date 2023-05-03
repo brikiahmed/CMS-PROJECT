@@ -38,7 +38,7 @@ class GenerateTemplateService
             $label = ucfirst($propertyName);
             $fileContent .= "<div class=\"form-group\">\n";
             $fileContent .= "<label for=\"$propertyName\">$label:</label>\n";
-            $fileContent .= "{{ form_widget(form." . strtolower($propertyName) . ") }}\n";
+            $fileContent .= "{{ form_widget(form." . lcfirst($propertyName) . ") }}\n";
             $fileContent .= "</div>\n";
         }
 

@@ -71,6 +71,8 @@ class CreateEntityAndMigrationCommand extends Command
 
         // create the template
         $this->generateTemplateService->generateTwigFormFile($entityName);
+
+        /*
         // Execute the latest migration
         $command = $this->getApplication()->find('doctrine:migrations:migrate');
         $arguments = [
@@ -80,7 +82,8 @@ class CreateEntityAndMigrationCommand extends Command
         $input = new ArrayInput($arguments);
         $command->run($input, $output);
 
-        return $output->writeln('Entity and migration created successfully.');
+        return $output->writeln('Entity and migration created successfully.'); */
+        return self::SUCCESS;
 
     }
 }

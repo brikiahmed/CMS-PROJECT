@@ -46,7 +46,6 @@ class FormBuilderService
                 $field->setForm($form);
                 $field->setLabel($button['label']);
                 $field->setType($button['type']);
-                $field->setPath($button['path']);
                 $this->buttonsFormRepository->add($field, true);
             }
         }
@@ -79,7 +78,6 @@ class FormBuilderService
                 $field = new ButtonsForm();
                 $field->setLabel($button['label']);
                 $field->setType($button['type']);
-                $field->setPath($button['path']);
                 $form->addButton($field);
             }
         }

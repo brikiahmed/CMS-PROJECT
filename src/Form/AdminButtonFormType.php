@@ -44,12 +44,6 @@ class AdminButtonFormType extends AbstractType
                     'Danger Button' => 'btn-danger',
                     'Warning Button' => 'btn-warning',
                 ],
-            ])
-            ->add('path', ChoiceType::class, [
-                'label' => 'Path of button',
-                'choices' => [
-                    'choices' => $filtredRoutes
-            ]
             ]);
     }
 
