@@ -17,16 +17,16 @@ app_register:
   controller: App\Controller\RegistrationController::register
   methods: [POST, GET]
 
-
 admin_form_view:
   path: /admin/form/view/{id}
   controller: App\Controller\admin\CmsFormsController::show
   methods: [GET]
 
-admin_template_form_edit:
-  path: /admin/template/{templatePath}/edit/{id}
-  controller: App\Controller\admin\TemplateFormController::edit
-  methods: [POST, GET]
+
+app_forms_delete:
+  path: /admin/form/delete/{id}
+  controller: App\Controller\admin\CmsFormsController::delete
+  methods: [POST]
 
 api_routes:
   path: /api/routes

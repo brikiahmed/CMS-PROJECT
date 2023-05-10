@@ -83,31 +83,22 @@
                                 <td class="title">{{ cmsForm.title }}</td>
                                 <td class="isEnabled">{{ cmsForm.isEnabled == 1 ? 'Is Active' : 'Not active'}}</td>
                                 <td>
-                                    <a href="{{ path('admin_form_edit', {'id': cmsForm.id}) }}"><button class="btn btn-outline-success btn-border"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></button></a>
-                                    <a><button class="btn btn-soft-danger btn-border" data-bs-toggle="modal" data-bs-target="#formmodal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></button>
-                                        <div id="formmodal" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-body text-center p-5">
-                                                        <lord-icon src="https://cdn.lordicon.com/pithnlch.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:120px;height:120px">
-                                                        </lord-icon>
-                                                        <div class="mt-4">
-                                                            <h3 class="mb-3">Information Message</h3>
-                                                            <p class="text-muted mb-4">You are deleting this form.This action is irreversible.Are you sure?</p>
-                                                            <div class="hstack gap-2 justify-content-center">
-                                                                <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Cancel</a>
-                                                                <form method="POST" action="{{ path('app_forms_delete', {'id': cmsForm.id}) }}">
-                                                                    <button class="btn btn-success"><input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cmsForm.id) }}">Validate</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- /.modal-content -->
-                                            </div><!-- /.modal-dialog -->
+                                    <div class="container">
+                                        <div class="btn">
+                                            <a href="{{ path('admin_form_edit', {'id': cmsForm.id}) }}"><button class="btn btn-outline-success btn-border"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></button></a>
                                         </div>
+                                        <div class="btn">
+                                            <form method="post" action="{{ path('app_forms_delete', {'id': cmsForm.id}) }}" onsubmit="return confirm('Are you sure you want to delete this form?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cmsForm.id) }}">
+                                                <button class="btn btn-soft-danger btn-border">
+                                                    <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+
                                     </a>
                                     <a href="{{ path('admin_form_show', {'id': cmsForm.id}) }}"><button class="btn btn-outline-secondary btn-border"> <i class="ri-eye-fill align-bottom me-2 text-muted"></i></button></a>
-
+                                    </div>
                                 </td>
 
                             </tr>

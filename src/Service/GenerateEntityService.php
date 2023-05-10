@@ -33,7 +33,6 @@ class GenerateEntityService
         $entityName = ucfirst($entityName);
         $entityFile = sprintf('src/Entity/%s.php', $entityName);
         if ($this->filesystem->exists($entityFile)) {
-
             // Delete the content of the existing entity file
             $this->filesystem->dumpFile($entityFile, '');
         }
@@ -43,7 +42,7 @@ class GenerateEntityService
 
         foreach ($fields as $field) {
             $fieldName = $this->formatFieldName($field['label']);
-            $fieldType = $field['type'];
+            $fieldType = $field['type'] === 'email' ||  $field['type'] === 'password' ? 'string' : $field['type'];
             $lowerFieldName = lcfirst($fieldName);
             // Generate the entity property
             $properties .= "\n    /**\n";
