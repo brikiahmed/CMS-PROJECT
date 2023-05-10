@@ -34,13 +34,6 @@ class AdminCmsFormType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'by_reference' => false,
-            ])
-            ->add('buttons', CollectionType::class, [
-                'entry_type' => AdminButtonFormType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
             ]);
     }
 

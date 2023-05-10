@@ -140,24 +140,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="app_accounts_delete", methods={"POST"})
-     */
-    public function delete(Request $request, User $account, UserRepository $accountsRepository): Response
-    {
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('You do not have access to this page.');
-        }
-
-        if ($this->isCsrfTokenValid('delete'.$account->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($account);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_accounts_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-    /**
      * @Route("/search", name="search", methods={"GET"}, options={"expose"=true})
      */
     public function search(Request $request, UserRepository $accountsRepository)

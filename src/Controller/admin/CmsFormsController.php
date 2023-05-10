@@ -5,13 +5,10 @@
 namespace App\Controller\admin;
 
 use App\Command\CreateEntityAndMigrationCommand;
-use App\Entity\Categories;
 use App\Entity\CustomForm\CmsForm;
 use App\Entity\User;
 use App\Form\AdminCmsFormType;
 use App\Form\RegistrationFormType;
-use App\Repository\ArticlesRepository;
-use App\Repository\ButtonsFormRepository;
 use App\Repository\CmsFormRepository;
 use App\Repository\FieldFormRepository;
 use App\Repository\UserRepository;
@@ -21,7 +18,6 @@ use App\Service\GenerateEntityService;
 use App\Service\GenerateFormTypeService;
 use App\Service\GenerateRepositoryService;
 use App\Service\GenerateTemplateService;
-use App\Service\MigrationGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -85,9 +81,7 @@ class CmsFormsController extends AbstractController
             $title = $formData->getTitle();
             $isEnabled = $formData->getIsEnabled();
             $fields = $request->request->get('fields');
-            $buttons = $request->request->get('buttons');
             $formatedData['fields'] = $fields;
-            $formatedData['buttons'] = $buttons;
             $idForm = $formBuilderService->createForm($title, $isEnabled ,$formatedData);
 
 
@@ -110,10 +104,10 @@ class CmsFormsController extends AbstractController
 
             // Create a new instance of the ArrayInput with the arguments
             $input = new ArrayInput($arguments);
-
-            // Create a new instance of the BufferedOutput
+            // Create a new instance of the BufferedOutput to capture the output of the command
+            $output = new BufferedOutput();
             try {
-                $application->run($input);
+                $application->run($input, $output);
             } catch (\Exception $exception) {
                 return $this->redirectToRoute('admin_form_index', ['id' => $idForm->getId()]);
             }
@@ -132,11 +126,9 @@ class CmsFormsController extends AbstractController
         $form = $this->createForm(AdminCmsFormType::class, $cmsForm);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($request->request->get('fields') || $request->request->get('buttons')) {
+            if ($request->request->get('fields')) {
                 $fields = $request->request->get('fields') ?? null;
-                $buttons = $request->request->get('buttons') ?? null;
                 $formatedData['fields'] = $fields;
-                $formatedData['buttons'] = $buttons;
                 $formBuilder->createFieldAndButtonForExistingForm($cmsForm, $formatedData);
             }
             $cmsFormRepository->add($cmsForm, true);
@@ -151,7 +143,7 @@ class CmsFormsController extends AbstractController
     /**
      * @Route("/form/show/{id}", name="admin_form_show",  methods={"GET", "POST"})
      */
-    public function show(CmsForm $form, FieldFormRepository $fieldFormRepository, ButtonsFormRepository $buttonsFormRepository): Response
+    public function show(CmsForm $form, FieldFormRepository $fieldFormRepository): Response
     {
         // Check if the user has the necessary role
         if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_VIEWER')) {
@@ -161,7 +153,6 @@ class CmsFormsController extends AbstractController
         $formData = [
             'title' => $form->getTitle(),
             'fields' => $fieldFormRepository->findBy(['form' => $form->getId()]),
-            'buttons' => $buttonsFormRepository->findBy(['form' => $form->getId()]),
         ];
         // Render the view
         return $this->render('admin/forms/custom-forms/view_custom_form.html.twig', [
@@ -170,21 +161,21 @@ class CmsFormsController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="app_accounts_delete", methods={"POST"})
+     * @Route("/form/delete/{id}", name="app_forms_delete", methods={"POST"})
      */
-    public function delete(Request $request, User $account): Response
+    public function delete(Request $request, CmsForm $form): Response
     {
         if (!$this->isGranted('ROLE_ADMIN')) {
             throw new AccessDeniedException('You do not have access to this page.');
         }
 
-        if ($this->isCsrfTokenValid('delete'.$account->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$form->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($account);
+            $entityManager->remove($form);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_accounts_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('admin_form_index', [], Response::HTTP_SEE_OTHER);
     }
 
     /**

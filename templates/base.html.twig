@@ -784,30 +784,6 @@
                 </div>
                 <ul class="navbar-nav" id="navbar-nav">
                     <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="">
-                            <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Articles</span>
-                        </a>
-                    </li> <!-- end Dashboard Menu -->
-                    <li class="nav-item">
-                        <a class="nav-link menu-link" href="#categoriesList" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
-                            <i class="ri-account-circle-line"></i> <span data-key="t-authentication">Categories</span>
-                        </a>
-                        <div class="collapse menu-dropdown" id="categoriesList">
-                            <ul class="nav nav-sm flex-column">
-
-                                <li class="nav-item">
-                                    <a href=  class="nav-link" data-key="t-horizontal">List category</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href=  class="nav-link" data-key="t-horizontal">Add new category</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href= class="nav-link" data-key="t-detached">Add new Sub category</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link menu-link" href="#formList" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
@@ -822,24 +798,6 @@
                                 <li class="nav-item">
                                     <a href={{ path('admin_form_index') }} class="nav-link" data-key="t-horizontal">List Forms</a>
                                 </li>
-
-                                <a class="nav-link menu-link" href="#useTemplateMenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarAuth">
-                                    <span data-key="t-authentication">Use template</span>
-                                </a>
-
-                                <div class="collapse menu-dropdown" id="useTemplateMenu">
-                                    <ul class="nav nav-sm flex-column">
-                                        <li class="nav-item">
-                                            <a href="{{ path('admin_template_form_edit', {'id': 1, 'templatePath' : 'register'}) }}" class="nav-link" data-key="t-horizontal">Registrations Form</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ path('admin_template_form_edit', {'id': 2, 'templatePath' : 'login'}) }}" class="nav-link" data-key="t-horizontal">Login Form</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="{{ path('admin_template_form_edit', {'id': 3, 'templatePath' : 'contact-us'}) }}" class="nav-link" data-key="t-horizontal">Contact Form</a>
-                                        </li>
-                                    </ul>
-                                </div>
                             </ul>
                         </div>
                     </li>

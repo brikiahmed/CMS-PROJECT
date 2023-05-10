@@ -2,6 +2,21 @@
 {% block title %}Add new form{% endblock %}
 
 {% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <h4 class="mb-sm-0">New form</h4>
+
+                <div class="page-title-right">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Forms</a></li>
+                        <li class="breadcrumb-item active">New form</li>
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <style>
         .switch {
@@ -52,15 +67,6 @@
     <h2>Create New Custom Form</h2>
 
     {{ form_start(form) }}
-    <div class="mb-3" style="margin-left: 90%">
-        <label class="form-label" for="article-title-input">is active</label>
-        {{ form_widget(form.isEnabled, {'attr': {'class': 'checkbox'}}) }}
-        {% if form_errors(form.isEnabled)is not empty %}
-            <div class="alert alert-danger">
-                {{ form_errors(form.isEnabled) }}
-            </div>
-        {% endif %}
-    </div>
 
     <div class="mb-3">
         <label class="form-label">Title Form</label>
@@ -87,20 +93,18 @@
             <button type="button" class="btn btn-primary add-field-button">Add Field</button>
         </div>
     </div>
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Add button form</h3>
+    <div>
+        <div class="mb-3" style="margin-left: 90%">
+            <label class="form-label" for="article-title-input">is active</label>
+            {{ form_widget(form.isEnabled, {'attr': {'class': 'checkbox'}}) }}
+            {% if form_errors(form.isEnabled)is not empty %}
+                <div class="alert alert-danger">
+                    {{ form_errors(form.isEnabled) }}
+                </div>
+            {% endif %}
         </div>
-        <div id="buttons-container" class="card-body">
-            {% for route in form.buttons %}
-                {{ form_row(route.path, {'attr': {'class': 'col form-control'}}) }}
-            {% endfor %}
-        </div>
-        <div class="card-footer">
-            <button style="width: 13%;" type="button" class="btn btn-primary add-button-submit">Add Button</button>
-        </div>
+        <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
     </div>
-    <button type="submit" class="btn btn-success">{{ button_label|default('Save') }}</button>
     {{ form_end(form) }}
 {% endblock %}
 
@@ -111,50 +115,7 @@
     <script>
         $(document).ready(function() {
             var $fieldsContainer = $('#fields-container');
-            var $buttonsContainer = $('#buttons-container');
             var $addButton = $('.add-field-button');
-            var $addButtonSubmit = $('.add-button-submit');
-            $addButtonSubmit.click(function () {
-                var buttonCount = $buttonsContainer.children().length;
-
-                var $labelButton = $('<input>')
-                    .addClass('col')
-                    .attr('type', 'text')
-                    .attr('name', 'buttons[' + buttonCount + '][label]')
-                    .attr('placeholder', 'Label')
-                    .addClass('form-control')
-                    .css('margin-right', '10px'); // Add desired margin value
-
-                var $typeButton = $('<select>')
-                    .addClass('col')
-                    .attr('name', 'buttons[' + buttonCount + '][type]')
-                    .addClass('form-control')
-                    .append($('<option>').attr('value', 'btn-primary').text('Primary Button')) // Add the desired button class as an option
-                    .append($('<option>').attr('value', 'btn-secondary').text('Secondary Button'))
-                    .append($('<option>').attr('value', 'btn-success').text('Success Button'))
-                    .append($('<option>').attr('value', 'btn-danger').text('Danger Button'))
-                    .append($('<option>').attr('value', 'btn-warning').text('Warning Button'));
-
-                var $removeFieldButton = $('<button>')
-                    .attr('type', 'button')
-                    .addClass('btn btn-danger remove-button-submit')
-                    .text('Remove button')
-                    .css('width', '118px')
-                    .click(function() {
-                        $(this).closest('.button-container').remove();
-                    });
-
-
-                var $buttonContainer = $('<div class="container card row g-lg-2">')
-
-                    .addClass('button-container')
-
-                    .append($labelButton) // Append the label container
-                    .append($typeButton)
-                    .append($removeFieldButton);
-
-                $buttonsContainer.append($buttonContainer);
-            });
 
             $addButton.click(function() {
                 var fieldCount = $fieldsContainer.children().length / 4;

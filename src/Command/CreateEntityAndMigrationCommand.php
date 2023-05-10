@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use function PHPUnit\Framework\returnValue;
 
 class CreateEntityAndMigrationCommand extends Command
 {
@@ -54,36 +55,40 @@ class CreateEntityAndMigrationCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $entityName = $input->getArgument('entityName');
-        $fields = $input->getArgument('fields');
+        try {
+            $entityName = $input->getArgument('entityName');
+            $fields = $input->getArgument('fields');
 
-        // write from scratch the entity file
-        $this->entityGenerator->generate($entityName, $fields);
+            // write from scratch the entity file
+            $this->entityGenerator->generate($entityName, $fields);
 
-        // write from scratch the repository file
-        $this->generateRepositoryService->generate($entityName);
+            // write from scratch the repository file
+            $this->generateRepositoryService->generate($entityName);
 
-        // Create the form type
-        $this->generateFormTypeService->generate($entityName, $fields);
+            // Create the form type
+            $this->generateFormTypeService->generate($entityName, $fields);
 
-        // Create the controller
-        $this->generateControllerService->generateControllerFile($entityName);
+            // Create the controller
+            $this->generateControllerService->generateControllerFile($entityName);
 
-        // create the template
-        $this->generateTemplateService->generateTwigFormFile($entityName);
+            // create the template
+            $this->generateTemplateService->generateTwigFormFile($entityName);
 
-        /*
-        // Execute the latest migration
-        $command = $this->getApplication()->find('doctrine:migrations:migrate');
-        $arguments = [
-            'command' => 'doctrine:migrations:migrate',
-            '--no-interaction' => true,
-        ];
-        $input = new ArrayInput($arguments);
-        $command->run($input, $output);
 
-        return $output->writeln('Entity and migration created successfully.'); */
-        return self::SUCCESS;
+            // Execute the latest migration
+            $command = $this->getApplication()->find('doctrine:migration:migrate');
+            $arguments = [
+                'command' => 'doctrine:migration:migrate',
+                '--no-interaction' => true,
+            ];
+            $input = new ArrayInput($arguments);
+            $command->run($input, $output);
+
+            return Command::SUCCESS;
+        } catch (\Exception $exception) {
+            return Command::FAILURE;
+        }
+
 
     }
 }

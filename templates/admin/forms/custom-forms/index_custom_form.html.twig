@@ -26,12 +26,12 @@
                     <a href="{{ path('admin_form_new') }}"><button type="button" class="btn btn-primary waves-effect waves-ligh" ><i class="ri-add-fill me-1 align-bottom"></i>Create form</button></a>
                 </div>
             </div>
-            <div class="col-xxl-6 col-sm-9">
-                <div class="search-box">
-                    <form>
-                        <input type="text" id="search-input">
-                    </form>
-                    <i class="ri-search-line search-icon"></i>
+            <div class="col-sm">
+                <div class="d-flex justify-content-sm-end">
+                    <div class="search-box ms-2">
+                        <input type="text" class="form-control search" placeholder="Search..." id="searchInput">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
                 </div>
             </div>
 
@@ -52,7 +52,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="t" class="table align-middle table-nowrap table-striped-columns mb-0">
+                    <table id="tableForm" class="table align-middle table-nowrap table-striped-columns mb-0">
                         <thead class="table-light" >
                         <tr>
                             <th scope="col" style="width: 46px;">
@@ -70,7 +70,7 @@
                             </th>
                         </tr>
                         </thead>
-                        <tbody id="all">
+                        <tbody class="list form-check-all">
                         {% for cmsForm in pagination %}
                             <tr>
                                 <td>
@@ -79,13 +79,13 @@
                                         <label class="form-check-label" for="cardtableCheck01"></label>
                                     </div>
                                 </td>
-                                <td>{{ cmsForm.id }}</td>
-                                <td>{{ cmsForm.title }}</td>
-                                <td>{{ cmsForm.isEnabled == 1 ? 'Is Active' : 'Not active'}}</td>
+                                <td class="id">{{ cmsForm.id }}</td>
+                                <td class="title">{{ cmsForm.title }}</td>
+                                <td class="isEnabled">{{ cmsForm.isEnabled == 1 ? 'Is Active' : 'Not active'}}</td>
                                 <td>
                                     <a href="{{ path('admin_form_edit', {'id': cmsForm.id}) }}"><button class="btn btn-outline-success btn-border"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i></button></a>
-                                    <a><button class="btn btn-soft-danger btn-border" data-bs-toggle="modal" data-bs-target="#topmodal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></button>
-                                        <div id="topmodal" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+                                    <a><button class="btn btn-soft-danger btn-border" data-bs-toggle="modal" data-bs-target="#formmodal"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i></button>
+                                        <div id="formmodal" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-body text-center p-5">
@@ -93,10 +93,10 @@
                                                         </lord-icon>
                                                         <div class="mt-4">
                                                             <h3 class="mb-3">Information Message</h3>
-                                                            <p class="text-muted mb-4">You are deleting this accounts.This action is irreversible.Are you sure?</p>
+                                                            <p class="text-muted mb-4">You are deleting this form.This action is irreversible.Are you sure?</p>
                                                             <div class="hstack gap-2 justify-content-center">
                                                                 <a href="javascript:void(0);" class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Cancel</a>
-                                                                <form method="post" >
+                                                                <form method="POST" action="{{ path('app_forms_delete', {'id': cmsForm.id}) }}">
                                                                     <button class="btn btn-success"><input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cmsForm.id) }}">Validate</button>
                                                                 </form>
                                                             </div>
@@ -119,6 +119,12 @@
                         </tbody>
 
                     </table>
+                    <div class="noresult" id="noresult" style="display: none">
+                        <div class="text-center">
+                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
+                            <h5 class="mt-2">Sorry! No Result Found</h5>
+                        </div>
+                    </div>
                     <br>
                     <div class="navigation text-center">
                         {% if pagination.getTotalItemCount  > 0 %}
@@ -133,4 +139,25 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+    <script>
+        var options = {
+            valueNames: ['id', 'title', 'isEnabled']
+        };
+        var articleList = new List('tableForm', options);
+        var searchBox = document.getElementById('searchInput');
+        searchBox.addEventListener('keyup', function() {
+            var results = articleList.search(searchBox.value, ['id', 'title', 'isEnabled']);
+            var noResultsElement = document.getElementById('noresult');
+            if (results.length === 0) {
+                noResultsElement.style.display = 'block';
+            } else {
+                noResultsElement.style.display = 'none';
+            }
+        });
+    </script>
 {% endblock %}

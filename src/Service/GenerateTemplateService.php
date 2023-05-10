@@ -22,6 +22,22 @@ class GenerateTemplateService
         // Define the file content
         $fileContent = "{% extends 'base.html.twig' %}\n";
         $fileContent .= "{% block content %}\n";
+        $fileContent .= "
+            <div class=\"row\">
+        <div class=\"col-12\">
+            <div class=\"page-title-box d-sm-flex align-items-center justify-content-between\">
+                <h4 class=\"mb-sm-0\">New $entityName</h4>
+
+                <div class=\"page-title-right\">
+                    <ol class=\"breadcrumb m-0\">
+                        <li class=\"breadcrumb-item\"><a href=\"javascript: void(0);\">$entityName</a></li>
+                        <li class=\"breadcrumb-item active\">New $entityName</li>
+                    </ol>
+                </div>
+
+             </div>
+            </div>
+        </div>";
         $fileContent .= "{{ form_start (form,{'attr':{'novalidate':'novalidate'}} ) }}\n";
 
         // Get the entity's properties
@@ -36,9 +52,9 @@ class GenerateTemplateService
 
             $propertyName = $property->getName();
             $label = ucfirst($propertyName);
-            $fileContent .= "<div class=\"form-group\">\n";
-            $fileContent .= "<label for=\"$propertyName\">$label:</label>\n";
-            $fileContent .= "{{ form_widget(form." . lcfirst($propertyName) . ") }}\n";
+            $fileContent .= "<div class=\"mb-3\">\n";
+            $fileContent .= "<label class=\"form-label\">$label:</label>\n";
+            $fileContent .= "{{ form_widget(form." . lcfirst($propertyName) . ", {'attr': {'class': 'form-control', 'placeholder': 'Enter $propertyName'}}) }}\n";
             $fileContent .= "</div>\n";
         }
 

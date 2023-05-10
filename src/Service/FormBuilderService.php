@@ -14,13 +14,11 @@ use Doctrine\ORM\EntityManagerInterface;
 class FormBuilderService
 {
     private $em;
-    private $buttonsFormRepository;
     private $fieldFormRepository;
 
-    public function __construct(EntityManagerInterface $em, ButtonsFormRepository $buttonsFormRepository, FieldFormRepository $fieldFormRepository)
+    public function __construct(EntityManagerInterface $em, FieldFormRepository $fieldFormRepository)
     {
         $this->em = $em;
-        $this->buttonsFormRepository = $buttonsFormRepository;
         $this->fieldFormRepository = $fieldFormRepository;
     }
 
@@ -38,15 +36,6 @@ class FormBuilderService
                 $field->setType($fieldData['type']);
                 $field->setIsRequired($fieldData['isRequired'] ?? 0);
                 $this->fieldFormRepository->add($field , true);
-            }
-        }
-        if(isset($fields['buttons'])) {
-            foreach ($fields['buttons'] as $button) {
-                $field = new ButtonsForm();
-                $field->setForm($form);
-                $field->setLabel($button['label']);
-                $field->setType($button['type']);
-                $this->buttonsFormRepository->add($field, true);
             }
         }
     }
@@ -70,15 +59,6 @@ class FormBuilderService
                 $field->setType($fieldData['type']);
                 $field->setIsRequired($fieldData['isRequired'] ?? 0);
                 $form->addField($field);
-            }
-        }
-
-        if (isset($fields['buttons'])) {
-            foreach ($fields['buttons'] as $button) {
-                $field = new ButtonsForm();
-                $field->setLabel($button['label']);
-                $field->setType($button['type']);
-                $form->addButton($field);
             }
         }
 
