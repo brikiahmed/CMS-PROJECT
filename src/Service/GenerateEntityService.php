@@ -43,6 +43,13 @@ class GenerateEntityService
         foreach ($fields as $field) {
             $fieldName = $this->formatFieldName($field['label']);
             $fieldType = $field['type'] === 'email' ||  $field['type'] === 'password' ? 'string' : $field['type'];
+            if ($field['type'] === 'boolean') {
+                $setAndGetType = 'bool';
+            } else if ($field['type'] === 'integer') {
+                $setAndGetType = 'int';
+            } else {
+                $setAndGetType = 'string';
+            }
             $lowerFieldName = lcfirst($fieldName);
             // Generate the entity property
             $properties .= "\n    /**\n";
@@ -52,14 +59,14 @@ class GenerateEntityService
 
             // Generate the getter
             $gettersAndSetters .= "\n";
-            $gettersAndSetters .= "    public function get$fieldName(): $fieldType\n";
+            $gettersAndSetters .= "    public function get$fieldName(): $setAndGetType\n";
             $gettersAndSetters .= "    {\n";
             $gettersAndSetters .= "        return \$this->$lowerFieldName;\n";
             $gettersAndSetters .= "    }\n";
 
             // Generate the setter
             $gettersAndSetters .= "\n";
-            $gettersAndSetters .= "    public function set$fieldName($fieldType \$$fieldName): self\n";
+            $gettersAndSetters .= "    public function set$fieldName($setAndGetType \$$fieldName): self\n";
             $gettersAndSetters .= "    {\n";
             $gettersAndSetters .= "        \$this->$lowerFieldName = \$$fieldName;\n\n";
             $gettersAndSetters .= "        return \$this;\n";

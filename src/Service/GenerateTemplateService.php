@@ -1,16 +1,19 @@
 <?php
 namespace App\Service;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class GenerateTemplateService
 {
     private $kernel;
-    private $entityNamespace;
+    private $entityManager;
 
-    public function __construct(KernelInterface $kernel)
+    public function __construct(KernelInterface $kernel, EntityManagerInterface $entityManager)
     {
         $this->kernel = $kernel;
+        $this->entityManager = $entityManager;
     }
 
     public function generateTwigFormFile($entityName)
@@ -40,21 +43,20 @@ class GenerateTemplateService
         </div>";
         $fileContent .= "{{ form_start (form,{'attr':{'novalidate':'novalidate'}} ) }}\n";
 
-        // Get the entity's properties
-        $reflectionClass = new \ReflectionClass("App\\Entity\\$entityName");
-        $properties = $reflectionClass->getProperties();
+        $entityClassName = "App\\Entity\\$entityName";
+        $metadata = $this->entityManager->getClassMetadata($entityClassName);
 
-        foreach ($properties as $property) {
+        foreach ($metadata->getFieldNames() as $fieldName) {
             // Skip properties that shouldn't be displayed in the form
-            if ($property->getName() === 'id') {
+            if ($fieldName === 'id') {
                 continue;
             }
-
-            $propertyName = $property->getName();
+            $formControlType = $metadata->getTypeOfField($fieldName) === 'boolean' ? 'checkbox' : 'form-control';
+            $propertyName = $fieldName;
             $label = ucfirst($propertyName);
             $fileContent .= "<div class=\"mb-3\">\n";
             $fileContent .= "<label class=\"form-label\">$label:</label>\n";
-            $fileContent .= "{{ form_widget(form." . lcfirst($propertyName) . ", {'attr': {'class': 'form-control', 'placeholder': 'Enter $propertyName'}}) }}\n";
+            $fileContent .= "{{ form_widget(form." . lcfirst($propertyName) . ", {'attr': {'class':'$formControlType', 'placeholder': 'Enter $propertyName'}}) }}\n";
             $fileContent .= "</div>\n";
         }
 
