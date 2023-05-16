@@ -102,9 +102,9 @@
         </div>
     </div>
     <div>
-        <div class="mb-3" style="margin-left: 90%">
+        <div class="mb-3 form-check form-switch mb-3" style="margin-left: 90%">
             <label class="form-label" for="article-title-input">is active</label>
-            {{ form_widget(form.isEnabled, {'attr': {'class': 'checkbox'}}) }}
+            {{ form_widget(form.isEnabled, {'attr': {'class': 'form-check-input'}}) }}
             {% if form_errors(form.isEnabled)is not empty %}
                 <div class="alert alert-danger">
                     {{ form_errors(form.isEnabled) }}

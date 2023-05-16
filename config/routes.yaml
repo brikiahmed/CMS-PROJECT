@@ -1,22 +1,3 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
-search:
-  path: /search
-  methods: [GET]
-  controller: App\Controller\AccountsController::search
-
-app_login:
-  path: /login
-  controller: App\Controller\SecurityController::login
-  methods: [POST, GET]
-
-
-app_register:
-  path: /register
-  controller: App\Controller\RegistrationController::register
-  methods: [POST, GET]
-
 admin_form_view:
   path: /admin/form/view/{id}
   controller: App\Controller\admin\CmsFormsController::show
@@ -28,6 +9,6 @@ app_forms_delete:
   controller: App\Controller\admin\CmsFormsController::delete
   methods: [POST]
 
-api_routes:
-  path: /api/routes
-  controller: App\Controller\admin\CmsFormsController::getRoutes
+redirect_to_path:
+  path: /admin/form/index
+  controller: App\Controller\admin\CmsFormsController::redirectToPathAction

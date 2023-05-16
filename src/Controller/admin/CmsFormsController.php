@@ -24,9 +24,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -36,14 +40,20 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class CmsFormsController extends AbstractController
 {
+
+    private $kernel;
+
+    public function __construct(KernelInterface $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
+
     /**
      * @Route("/form/index", name="admin_form_index", methods={"GET"})
      */
     public function index(CmsFormRepository $cmsFormRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('You do not have access to this page.');
-        }
 
         $data = $cmsFormRepository->findAll();
         // Paginate the data
@@ -107,7 +117,8 @@ class CmsFormsController extends AbstractController
             // Create a new instance of the BufferedOutput to capture the output of the command
             $output = new BufferedOutput();
             try {
-                $application->run($input, $output);
+                $command->run($input, $output);
+                return $this->redirectToRoute('admin_form_index', ['id' => $idForm->getId()]);
             } catch (\Exception $exception) {
                 return $this->redirectToRoute('admin_form_index', ['id' => $idForm->getId()]);
             }
@@ -145,10 +156,6 @@ class CmsFormsController extends AbstractController
      */
     public function show(CmsForm $form, FieldFormRepository $fieldFormRepository): Response
     {
-        // Check if the user has the necessary role
-        if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_VIEWER')) {
-            throw new AccessDeniedException('You do not have access to this page.');
-        }
 
         $formData = [
             'title' => $form->getTitle(),
@@ -165,10 +172,6 @@ class CmsFormsController extends AbstractController
      */
     public function delete(Request $request, CmsForm $form): Response
     {
-        if (!$this->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException('You do not have access to this page.');
-        }
-
         if ($this->isCsrfTokenValid('delete'.$form->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($form);
@@ -179,21 +182,10 @@ class CmsFormsController extends AbstractController
     }
 
     /**
-     * Get All Routes of application
-     * @param RouterInterface $router
-     * @return JsonResponse
+     * @Route("/admin/form/index", name="redirect_to_path")
      */
-    public function getRoutes(RouterInterface $router)
+    public function redirectToPathAction()
     {
-        $filtredRoutes = [];
-        $routes = $router->getRouteCollection();
-        foreach ($routes as $routeName => $route) {
-            if (substr($routeName, 0, strlen("_profile")) !== "_profile" &&
-                strpos($routeName, "_profile") === false) {
-                $filtredRoutes[$routeName] = $routeName;
-            }
-        }
-
-        return new JsonResponse($filtredRoutes);
+        return new RedirectResponse('/admin/form/index');
     }
 }

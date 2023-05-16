@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -83,9 +84,10 @@ class CreateEntityAndMigrationCommand extends Command
             ];
             $input = new ArrayInput($arguments);
             $command->run($input, $output);
-
             return Command::SUCCESS;
         } catch (\Exception $exception) {
+            $errorMessage = $exception->getMessage();
+            $output->writeln('<error>An error occurred: ' . $errorMessage . '</error>');
             return Command::FAILURE;
         }
 

@@ -4,25 +4,12 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
-    providers:
-        # used to reload user from session & other features (e.g. switch_user)
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
-        # used to reload user from session & other features (e.g. switch_user)
-        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: app_user_provider
-            custom_authenticator:
-                - App\Security\LoginFormAuthenticator
-            logout:
-                path: app_logout
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -34,18 +21,6 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
-
-    access_control:
-        - { path: ^/admin/, roles: ROLE_ADMIN }
-        - { path: ^/edit/, roles: ROLE_EDITOR }
-        - { path: ^/new/, roles: ROLE_EDITOR }
-        - { path: ^/view/, roles: ROLE_VIEWER }
-        - { path: ^/front/, roles: ROLE_USER }
-    role_hierarchy:
-        ROLE_ADMIN: [ROLE_ADMIN]
-        ROLE_EDITOR: [ROLE_VIEWER, ROLE_EDITOR]
-        ROLE_VIEWER: [ROLE_VIEWER]
-        ROLE_USER: [ROLE_USER]
 
 when@test:
     security:

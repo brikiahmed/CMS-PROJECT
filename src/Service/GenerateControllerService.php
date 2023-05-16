@@ -40,9 +40,6 @@ class GenerateControllerService
         $fileContent .= "     */\n";
         $fileContent .= "    public function new(Request \$request, {$entityName}Repository \$repository): Response\n";
         $fileContent .= "    {\n";
-        $fileContent .= "        if (!\$this->isGranted('ROLE_EDITOR') && !\$this->isGranted('ROLE_ADMIN')) {\n";
-        $fileContent .= "            throw new AccessDeniedException('You do not have access to this page.');\n";
-        $fileContent .= "        }\n\n";
         $fileContent .= "        \$entity = new $entityName();\n";
         $fileContent .= "        \$form = \$this->createForm({$entityName}Type::class, \$entity);\n";
         $fileContent .= "        \$form->handleRequest(\$request);\n\n";
